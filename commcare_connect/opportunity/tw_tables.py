@@ -680,6 +680,247 @@ class WorkerLearnTable(tables.Table):
     def render_learning_hours(self, value):
         return format_html('<div class="w-[136px]">{}</div>', value)
 
+class WorkerDeliveryTable(BaseTailwindTable):
+    index = tables.Column(verbose_name="#", orderable=False)
+    worker = tables.Column(verbose_name="Worker")
+    indicator = tables.TemplateColumn(
+        verbose_name="Indicator",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },
+        orderable=False,
+        template_code="""
+            {% if value %}
+            <div class="w-[40px]"><div class="w-4 h-2 rounded bg-{{ value }}"></div></div>
+            {% else %}
+                <div class="w-[40px]"><div class="w-4 h-2"></div></div>
+            {% endif %}
+            """,
+    )
+    lastActive = tables.Column(
+        verbose_name="Last Active",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },
+    )
+    payment_units = tables.Column(
+        verbose_name="Payment Units",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },
+    )
+    started = tables.Column(
+        verbose_name="Started",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },
+    )
+    delivered = tables.Column(
+        verbose_name="Delivered",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },
+    )
+    flagged = tables.Column(    
+        verbose_name="Flagged",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },  
+    )
+    approved = tables.Column(
+        verbose_name="Approved",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },
+    )
+    rejected = tables.Column(
+        verbose_name="Rejected",
+        attrs={
+            "td": {
+                "class": "p-0",
+            }
+        },
+    )
+    class Meta:
+        attrs = {
+            "class": "w-full max-w-full",
+            "thead": {"class": "hidden"},
+            "tbody": {"class": "block w-full h-full"},
+        }
+        row_attrs = {
+            "class": "flex text-slate-900 items-center text-xs justify-between h-14 px-3 w-full  hover:bg-gray-100 relative transition-colors duration-300",
+            "x-data": "{previousWorker: null, previousIndex: null, previousIndicator: null, previousLastActive: null}"
+        }
+        sequence = (
+            "index",
+            "worker",
+            "indicator",
+            "lastActive",
+            "payment_units",
+            "started",
+            "delivered",
+            "flagged",
+            "approved",
+            "rejected",
+        )
+    
+    def render_index(self, value, record):
+        # Use 1-based indexing for display and storage
+        display_index = value
+
+        return format_html(
+            """
+            <div class="w-[40px] text-brand-deep-purple relative flex items-center justify-start h-full"
+                x-data="{{'hovering': false}}"
+                x-init="$nextTick(() => {{
+                    if (previousIndex === {0}) {{
+                        $el.classList.add('opacity-0');
+                    }}
+                    previousIndex = {0};
+                }})"
+                x-on:mouseenter="hovering = true"
+                x-on:mouseleave="hovering = false">
+
+                <!-- Show empty square when hovering and not selected -->
+                <i x-show="!isRowSelected({0}) && hovering"
+                class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square text-brand-deep-purple top-1/2"
+                x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                <!-- Show checked square when selected -->
+                <i x-show="isRowSelected({0})"
+                class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square-check text-brand-deep-purple top-1/2"
+                x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                <!-- Show number when not hovering and not selected -->
+                <span x-show="!isRowSelected({0}) && !hovering"
+                    class="absolute pl-1 -translate-y-1/2 top-1/2">{0}</span>
+            </div>
+        """,
+            display_index,
+        )
+
+    def render_worker(self, value):
+        return format_html(
+            """
+        <div class="flex w-[168px] flex-col items-start"
+            x-init="$nextTick(() => {{
+                if (previousWorker && previousWorker.id === '{1}') {{
+                    $el.classList.add('opacity-0');
+                }}
+                previousWorker = {{'id': '{1}', 'name': '{0}'}};
+            }})">
+            <p class="text-sm text-slate-900">{0}</p>
+            <p class="text-xs text-slate-400">{1}</p>
+        </div>
+        """,
+            value["name"],
+            value["id"],
+        )
+
+    def render_indicator(self, value):
+        return format_html(
+            """
+            <div class="w-[40px]"
+                x-init="$nextTick(() => {{
+                    if (previousIndicator === '{0}') {{
+                        $el.classList.add('opacity-0');
+                    }}
+                    previousIndicator = '{0}';
+                }})">
+                <div class="w-4 h-2 rounded bg-{0}"></div>
+            </div>
+            """,
+            value if value else ""
+        )
+
+    def render_lastActive(self, value):
+        return format_html(
+            """
+            <div class="w-[104px]"
+                x-init="$nextTick(() => {{
+                    if (previousLastActive === '{0}') {{
+                        $el.classList.add('opacity-0');
+                    }}
+                    previousLastActive = '{0}';
+                }})">
+                {0}
+            </div>
+            """,
+            value
+        )
+
+    def render_payment_units(self, value):
+        return format_html('<div class="w-[248px]">{}</div>', value)
+    def render_started(self, value):
+        return format_html('<div class="w-[208px]">{}</div>', value)
+    def render_delivered(self, value):
+        return format_html(
+            """
+            <div class="w-[131px] relative"
+                x-data="{{
+                    isOpen: false,
+                    positionMenu() {{
+                        const rect = this.$el.getBoundingClientRect();
+                        const menu = this.$refs.menu;
+                        const top = rect.bottom + 5;  // Position below the element
+                        const left = rect.left;
+                        menu.style.top = top + 'px';
+                        menu.style.left = left + 'px';
+                    }}
+                }}"
+                x-on:click="isOpen = !isOpen; $nextTick(() => {{ if(isOpen) positionMenu() }})"
+                x-on:click.outside="isOpen = false">
+                <span class="px-3 py-1 rounded-lg cursor-pointer hover:bg-slate-200">
+                    {}
+                </span>
+                <div x-ref="menu"
+                    x-show="isOpen"
+                    x-transition
+                    class="fixed z-50 p-4 text-sm bg-white border rounded-lg shadow-md min-w-[200px]"
+                    style="display: none">
+                    <div class="space-y-2">
+                        <p class="font-medium text-slate-900">Delivered Items</p>
+                        <div class="space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Today</span>
+                                <span class="font-medium">5</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">This Week</span>
+                                <span class="font-medium">23</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">This Month</span>
+                                <span class="font-medium">{}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            """,
+            value, value
+        )
+    def render_flagged(self, value):
+        return format_html('<div class="w-[110px]">{}</div>', value)
+    def render_approved(self, value):
+        return format_html('<div class="w-[127px]">{}</div>', value)
+    def render_rejected(self, value):
+        return format_html('<div class="w-[112px]">{}</div>', value)
+        
 class CustomTable(BaseTailwindTable):
     index = tables.Column(verbose_name="#", orderable=False)
     name = tables.Column(verbose_name="Name")

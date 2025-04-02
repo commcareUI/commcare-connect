@@ -1,7 +1,129 @@
-<div class="min-w-48 flex flex-row items-center justify-between px-4 h-10 bg-brand-indigo rounded">
-    <div class="flex items-center">
-        <i class="fa-light {{icon}} text-white text-sm"></i>
-        <h3 class="text-sm font-normal text-white flex-1 pl-2 whitespace-nowrap">{{title }}</h3>
+<!-- Work In Progress -->
+<div x-data="{ isOpen: false, activeTab: 'learnApp' }" class="relative">
+    <div @click="isOpen = true" class="min-w-48 flex flex-row items-center justify-between px-4 h-10 bg-brand-indigo rounded cursor-pointer">
+        <div class="flex items-center">
+            <i class="fa-light {{icon}} text-white text-sm"></i>
+            <h3 class="text-sm font-normal text-white flex-1 pl-2 whitespace-nowrap">{{title }}</h3>
+        </div>
+        <h3 class="text-sm font-medium text-white">{{count}}</h3>
     </div>
-    <h3 class="text-sm font-medium text-white">{{count}}</h3>
+
+    <!-- Modal Backdrop -->
+    <div x-show="isOpen" 
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black bg-opacity-50 z-40"
+         @click="isOpen = false">
+    </div>
+
+    <!-- Modal Content -->
+    <div x-show="isOpen"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform scale-95"
+         x-transition:enter-end="opacity-100 transform scale-100"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100 transform scale-100"
+         x-transition:leave-end="opacity-0 transform scale-95"
+         @click.away="isOpen = false"
+         class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="bg-[#F4F4F4] rounded-2xl w-[952px] h-[554px] p-6">
+            <div class="flex h-14 rounded-lg bg-white px-4 gap-x-6">
+                <!-- Learn App Tab -->
+                <div 
+                    @click="activeTab = 'learnApp'; $nextTick(() => { 
+                        htmx.trigger('#learnApp-tab', 'loadLearnApp');
+                    })"
+                    id="learnApp-tab"
+                    class="relative cursor-pointer text-sm h-full flex items-center"
+                    :class="{
+                        'text-brand-deep-purple font-medium': activeTab === 'learnApp',
+                        'text-gray-500': activeTab !== 'learnApp'
+                    }"
+                    hx-get="/your-learn-app-endpoint/"
+                    hx-swap="innerHTML"
+                    hx-trigger="loadLearnApp"
+                    hx-target="#tab-content"
+                >
+                    <span>Learn App</span>
+                    <div 
+                        class="absolute bottom-0 left-0 w-full h-1.5 bg-brand-mango rounded-t-lg transform transition-all duration-300 ease-in-out"
+                        x-show="activeTab === 'learnApp'"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform scale-0"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-0"
+                    ></div>
+                </div>
+
+                <!-- Delivery App Tab -->
+                <div 
+                    @click="activeTab = 'deliveryApp'; $nextTick(() => { 
+                        htmx.trigger('#deliveryApp-tab', 'loadDeliveryApp');
+                    })"
+                    id="deliveryApp-tab"
+                    class="relative cursor-pointer text-sm h-full flex items-center"
+                    :class="{
+                        'text-brand-deep-purple font-medium': activeTab === 'deliveryApp',
+                        'text-gray-500': activeTab !== 'deliveryApp'
+                    }"
+                    hx-get="/your-delivery-app-endpoint/"
+                    hx-swap="innerHTML"
+                    hx-trigger="loadDeliveryApp"
+                    hx-target="#tab-content"
+                >
+                    <span>Delivery App</span>
+                    <div 
+                        class="absolute bottom-0 left-0 w-full h-1.5 bg-brand-mango rounded-t-lg transform transition-all duration-300 ease-in-out"
+                        x-show="activeTab === 'deliveryApp'"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform scale-0"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-0"
+                    ></div>
+                </div>
+
+                <!-- Payment Units Tab -->
+                <div 
+                    @click="activeTab = 'paymentUnits'; $nextTick(() => { 
+                        htmx.trigger('#paymentUnits-tab', 'loadPaymentUnits');
+                    })"
+                    id="paymentUnits-tab"
+                    class="relative cursor-pointer text-sm h-full flex items-center"
+                    :class="{
+                        'text-brand-deep-purple font-medium': activeTab === 'paymentUnits',
+                        'text-gray-500': activeTab !== 'paymentUnits'
+                    }"
+                    hx-get="/your-payment-units-endpoint/"
+                    hx-swap="innerHTML"
+                    hx-trigger="loadPaymentUnits"
+                    hx-target="#tab-content"
+                >
+                    <span>Payment Units</span>
+                    <div 
+                        class="absolute bottom-0 left-0 w-full h-1.5 bg-brand-mango rounded-t-lg transform transition-all duration-300 ease-in-out"
+                        x-show="activeTab === 'paymentUnits'"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 transform scale-0"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-0"
+                    ></div>
+                </div>
+            </div>
+            
+            <!-- Tab Content -->
+            <div id="tab-content" class="mt-4">
+                <!-- Content will be loaded here via HTMX -->
+            </div>
+        </div>
+    </div>
 </div>

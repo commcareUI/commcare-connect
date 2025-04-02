@@ -137,6 +137,7 @@ urlpatterns = [
     path("<int:opp_id>/tw/opportunity_worker/", tw_views.opportunity_worker, name="tw_opportunities"),
     path("<int:opp_id>/tw/visits/", tw_views.opportunity_visits, name="tw_visits"), # TODO
     path("<int:opp_id>/tw/create/", tw_views.create_opportunity, name="tw_visits"), # TODO
+    path("<int:opp_id>/tw/worker_delivery/", tw_views.worker_delivery, name="tw_worker_deliver"), 
     
     # Custom Tailwind Table 
     path("<int:opp_id>/tw/custom_table/", tw_views.custom_table, name="tw_custom_table"),

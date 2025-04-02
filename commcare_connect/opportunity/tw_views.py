@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .tw_tables import OpportunitiesListTable, VisitsTable, WorkerFlaggedTable, WorkerPaymentsTable, WorkerLearnTable,CustomTable
+from .tw_tables import OpportunitiesListTable, VisitsTable, WorkerFlaggedTable, WorkerPaymentsTable, WorkerLearnTable, CustomTable, WorkerDeliveryTable
 
 
 def custom_table(request, org_slug=None, opp_id=None):
@@ -1207,6 +1207,131 @@ def get_worker_last_payment(request, org_slug=None, opp_id=None):
 
     return HttpResponse(html)
 
+def worker_delivery(request, org_slug=None, opp_id=None):
+    data = [
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "₹ 4,780",
+            "started": "12-Aug-2025",
+            "delivered": "50",
+            "flagged": "5",
+            "approved": "45",
+            "rejected": "0",
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "₹ 5,000",
+            "started": "12-Aug-2025",
+            "delivered": "60",
+            "flagged": "3",
+            "approved": "57",
+            "rejected": "0",
+        },
+        {
+            "index": 1,
+            "worker": {"id": "IJ78KL12MN34", "name": "Evelyn Adams"},
+            "indicator": "red-600",
+            "lastActive": "95hr ago",
+            "payment_units": "₹ 3,500",
+            "started": "12-Aug-2025",
+            "delivered": "40",
+            "flagged": "10",
+            "approved": "30",
+            "rejected": "5",
+        },
+        {
+            "index": 4,
+            "worker": {"id": "GH56IJ78KL90", "name": "Olivia Robinson"},
+            "indicator": "yellow-600",
+            "lastActive": "12hr ago",
+            "payment_units": "₹ 6,200",
+            "started": "12-Aug-2025",
+            "delivered": "70",
+            "flagged": "2",
+            "approved": "68",
+            "rejected": "0",
+        },
+        {
+            "index": 5,
+            "worker": {"id": "MN23OP45QR67", "name": "Noah Martinez"},
+            "indicator": "gray-600",
+            "lastActive": "24hr ago",
+            "payment_units": "₹ 4,000",
+            "started": "12-Aug-2025",
+            "delivered": "55",
+            "flagged": "4",
+            "approved": "50",
+            "rejected": "1",
+        },
+        {
+            "index": 6,
+            "worker": {"id": "ST89UV12WX34", "name": "Emma Wilson"},
+            "lastActive": "48hr ago",
+            "payment_units": "₹ 5,500",
+            "started": "12-Aug-2025",
+            "delivered": "65",
+            "flagged": "3",
+            "approved": "62",
+            "rejected": "0",
+        },
+        {
+            "index": 7,
+            "worker": {"id": "YZ12AB34CD56", "name": "James Smith"},
+            "indicator": "red-600",
+            "lastActive": "72hr ago",
+            "payment_units": "₹ 6,000",
+            "started": "12-Aug-2025",
+            "delivered": "80",
+            "flagged": "5",
+            "approved": "75",
+            "rejected": "0",
+        },
+        {
+            "index": 8,
+            "worker": {"id": "EF78GH90IJ12", "name": "Sophia Johnson"},
+            "indicator": "orange-600",
+            "lastActive": "24hr ago",
+            "payment_units": "₹ 4,300",
+            "started": "12-Aug-2025",
+            "delivered": "45",
+            "flagged": "6",
+            "approved": "39",
+            "rejected": "0",
+        },
+        {
+            "index": 9,
+            "worker": {"id": "KL34MN56OP78", "name": "Mason Taylor"},
+            "indicator": "green-600",
+            "lastActive": "96hr ago",
+            "payment_units": "₹ 5,000",
+            "started": "12-Aug-2025",
+            "delivered": "60",
+            "flagged": "2",
+            "approved": "58",
+            "rejected": "0",
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "payment_units": "₹ 6,000",
+            "started": "12-Aug-2025",
+            "delivered": "75",
+            "flagged": "3",
+            "approved": "72",
+            "rejected": "0",
+        },
+    ]
+
+    table = WorkerDeliveryTable(data)
+    return render(request, "tailwind/pages/worker_delivery.html", {"table": table})
 
 def create_opportunity(request, org_slug=None, opp_id=None):
     step = {
