@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @tailwind utilities;
 
+@source "./safelist.txt";
+
 [x-cloak] {
     display: none !important;
 }
@@ -103,6 +105,17 @@
 
     .button-icon:focus{
         @apply bg-brand-mango/10;
+    }
+}
+
+@layer components {
+    .button-icon-activatable{
+        @apply rounded-full inline-flex items-center justify-center p-2 size-8 text-brand-deep-purple cursor-pointer;
+    }
+
+
+    .button-icon-activatable:focus{
+      @apply bg-brand-mango/10;
     }
 }
 
