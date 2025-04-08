@@ -181,18 +181,8 @@ class OpportunitiesListTable(BaseTailwindTable):
         
         self.base_columns['index'].verbose_name = mark_safe(
             '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('#')">
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer">
                 #
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('#') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('#'),
-                        'opacity-100': isSorted('#'),
-                        'animate-fade-in': isSorted('#') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
             '''
         )
@@ -244,158 +234,58 @@ class OpportunitiesListTable(BaseTailwindTable):
         )
 
         self.base_columns['opportunity'].verbose_name = mark_safe(f'''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-                @click="sortBy('opportunity')">
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
                 {opp_dropdown_html}
-                <i class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-caret-down"
-                    :class="{{
-                        'rotate-180': isSorted('opportunity') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('opportunity'),
-                        'opacity-100': isSorted('opportunity'),
-                        'animate-fade-in': isSorted('opportunity') && sortDirection === 'asc'
-                    }}"></i>
             </div>
         ''')
 
         self.base_columns['entityStatus'].verbose_name = mark_safe(f'''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-                @click="sortBy('entityStatus')">
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple "">
                 {status_dropdown_html}
-                <i class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-caret-down"
-                    :class="{{
-                        'rotate-180': isSorted('entityStatus') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('entityStatus'),
-                        'opacity-100': isSorted('entityStatus'),
-                        'animate-fade-in': isSorted('entityStatus') && sortDirection === 'asc'
-                    }}"></i>
             </div>
         ''')
 
-        self.base_columns['program'].verbose_name = mark_safe(
-            '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('program')">
+        self.base_columns['program'].verbose_name = mark_safe(f'''
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
                 Program
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('program') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('program'),
-                        'opacity-100': isSorted('program'),
-                        'animate-fade-in': isSorted('program') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
-            '''
-        )
+        ''')
 
-        self.base_columns['startDate'].verbose_name = mark_safe(
-            '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('startDate')">
+        self.base_columns['startDate'].verbose_name = mark_safe(f'''
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple ">
                 Start Date
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('startDate') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('startDate'),
-                        'opacity-100': isSorted('startDate'),
-                        'animate-fade-in': isSorted('startDate') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
-            '''
-        )
+        ''')
 
-        self.base_columns['endDate'].verbose_name = mark_safe(
-            '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('endDate')">
+        self.base_columns['endDate'].verbose_name = mark_safe(f'''
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
                 End Date
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('endDate') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('endDate'),
-                        'opacity-100': isSorted('endDate'),
-                        'animate-fade-in': isSorted('endDate') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
-            '''
-        )
+        ''')
 
-        self.base_columns['pendingInvites'].verbose_name = mark_safe(
-            '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('pendingInvites')">
+        self.base_columns['pendingInvites'].verbose_name = mark_safe(f'''
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
                 Pending Invites
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('pendingInvites') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('pendingInvites'),
-                        'opacity-100': isSorted('pendingInvites'),
-                        'animate-fade-in': isSorted('pendingInvites') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
-            '''
-        )
+        ''')
 
-        self.base_columns['inactiveWorkers'].verbose_name = mark_safe(
-            '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('inactiveWorkers')">
+        self.base_columns['inactiveWorkers'].verbose_name = mark_safe(f'''
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
                 Inactive Workers
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('inactiveWorkers') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('inactiveWorkers'),
-                        'opacity-100': isSorted('inactiveWorkers'),
-                        'animate-fade-in': isSorted('inactiveWorkers') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
-            '''
-        )
+        ''')
 
-        self.base_columns['pendingApprovals'].verbose_name = mark_safe(
-            '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('pendingApprovals')">
+        self.base_columns['pendingApprovals'].verbose_name = mark_safe(f'''
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
                 Pending Approvals
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('pendingApprovals') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('pendingApprovals'),
-                        'opacity-100': isSorted('pendingApprovals'),
-                        'animate-fade-in': isSorted('pendingApprovals') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
-            '''
-        )
+        ''')
 
-        self.base_columns['paymentsDue'].verbose_name = mark_safe(
-            '''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple cursor-pointer"
-            @click="sortBy('paymentsDue')">
+        self.base_columns['paymentsDue'].verbose_name = mark_safe(f'''
+            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
                 Payments Due
-                <i
-                    class="transition-all ml-1 duration-300 ease-in-out fa-duotone fa-solid fa-caret-down"
-                    :class="{
-                        'rotate-180': isSorted('paymentsDue') && sortDirection === 'desc',
-                        'opacity-0 group-hover:opacity-100': !isSorted('paymentsDue'),
-                        'opacity-100': isSorted('paymentsDue'),
-                        'animate-fade-in': isSorted('paymentsDue') && sortDirection === 'asc'
-                    }"
-                ></i>
             </div>
-            '''
-        )
+        ''')
 
     index = tables.Column(orderable=False)
     opportunity = tables.Column( orderable=False)
@@ -423,7 +313,7 @@ class OpportunitiesListTable(BaseTailwindTable):
                            "></i>
                         <span x-show="showTooltip"
                               :style="tooltipStyle"
-                              class="fixed z-50 bg-white shadow-sm text-brand-deep-purple text-xs py-0.5 px-4 rounded-lg whitespace-nowrap">
+                              class="fixed z-40 bg-white shadow-sm text-brand-deep-purple text-xs py-0.5 px-4 rounded-lg whitespace-nowrap">
                             Test Opportunity
                         </span>
                     </div>
@@ -441,15 +331,15 @@ class OpportunitiesListTable(BaseTailwindTable):
         orderable=False,
         template_code="""
             <div class="flex justify-start text-sm font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">
-               {% if value %}
-              {% if value == 'active' %}
-                  {% include "tailwind/components/badges/badge_sm.html" with bg_color='green-600/20' text='active' text_color='green-600' %}
-              {% elif value == 'inactive' %}
-                  {% include "tailwind/components/badges/badge_sm.html" with bg_color='orange-600/20' text='inactive' text_color='orange-600' %}
-              {% elif value == 'ended' %}
-                  {% include "tailwind/components/badges/badge_sm.html" with bg_color='slate-100/20' text='ended' text_color='slate-400' %}
-              {% endif %}
-              {% endif%}
+                {% if value %}
+                {% if value == 'active' %}
+                    <span class="badge badge-sm bg-green-600/20 text-green-600">{{value}}</span>
+                {% elif value == 'inactive' %}
+                    <span class="badge badge-sm bg-orange-600/20 text-orange-600">{{value}}</span>
+                {% elif value == 'ended' %}
+                    <span class="badge badge-sm bg-slate-100 text-slate-400">{{value}}</span>
+                {% endif %}
+               {% endif%}
             </div>
         """,
     )
@@ -536,26 +426,26 @@ class OpportunitiesListTable(BaseTailwindTable):
     
     def render_pendingInvites(self, value):
         return format_html(
-            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">{}</div>',
-            value['count'],
+            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis"><a href="{}">{}</a></div>',
+            value['link'], value['count'],
         )
     
     def render_inactiveWorkers(self, value):
         return format_html(
-            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">{}</div>',
-             value['count'],
+            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis"><a href="{}">{}</a></div>',
+            value['link'],  value['count'],
         )
     
     def render_pendingApprovals(self, value):
         return format_html(
-            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">{}</div>',
-            value['count'],
+            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis"><a href="{}">{}</a></div>',
+            value['link'], value['count'],
         )
     
     def render_paymentsDue(self, value):
         return format_html(
-            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">{}</div>',
-             value['amount'],
+            '<div class="flex justify-center text-sm underline underline-offset-2 font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis"><a href="{}">{}</a></div>',
+            value['link'], value['amount'],
         )
 
 class WorkerPaymentsTable(tables.Table):
@@ -719,11 +609,10 @@ class WorkerPaymentsTable(tables.Table):
                 <div x-ref="menu"
                     x-show="isOpen"
                     x-transition
-                    class="fixed z-50 p-5 text-sm bg-white border rounded-lg shadow-md text-brand-deep-purple text-nowrap whitespace-nowrap"
+                    class="fixed z-40 p-5 text-sm bg-white rounded-lg shadow-md text-brand-deep-purple text-nowrap whitespace-nowrap"
                     style="display: none">
                     <p class="text-xs text-slate-400">Payment History</p>
-                    <!-- TODO: @apply -->
-                    <button  class="flex items-center px-2 py-2 mt-3 mb-6 text-sm font-medium border border-gray-300 rounded-lg text-brand-deep-purple hover:bg-brand-indigo-100">Rollback lastPayment</button>
+                    <button  class="button button-md mt-3 mb-6 outline-style">Rollback Last Payment</button>
                     <div hx-get='/a/test-1/opportunity/1/tw/get_worker_last_payment/' hx-trigger='load' hx-swap='outerHTML'></div>
                 </div>
             </div>
@@ -986,9 +875,9 @@ class WorkerMainTable(BaseTailwindTable):
         orderable=False,
         template_code="""
         {% if value %}
-            <div class="w-[40px]"><div class="w-4 h-2 rounded bg-{{ value }}"></div></div>
+            <div class="w-10"><div class="w-4 h-2 rounded bg-{{ value }}"></div></div>
         {% else %}
-            <div class="w-[40px]"><div class="w-4 h-2"></div></div>
+            <div class="w-10"><div class="w-4 h-2"></div></div>
         {% endif %}
         """,
     )
@@ -998,15 +887,27 @@ class WorkerMainTable(BaseTailwindTable):
     )
     inviteDate = tables.Column(
         verbose_name="Invite Date",
+        orderable=False
     )
     startedLearn = tables.Column(
         verbose_name="Started Learn",
+        orderable=False
     )
     completedLearn = tables.Column(
         verbose_name="Completed Learn",
+        orderable=False
     )
     daysToCompleteLearn = tables.Column(
         verbose_name="Days to complete Learn",
+        orderable=False
+    )
+    firstDeliveryDate=tables.Column(
+        verbose_name="First Delivery Date",
+        orderable=False
+    )
+    daysToStartDelivery=tables.Column(
+        verbose_name="Days to Start Delivery",
+        orderable=False
     )
 
     def __init__(self, *args, **kwargs):
@@ -1058,7 +959,7 @@ class WorkerMainTable(BaseTailwindTable):
 
         return format_html(
             """
-            <div class="text-brand-deep-purple relative flex items-center justify-start h-full"
+            <div class="text-brand-deep-purple relative flex items-center justify-start h-full w-4"
                 x-data="{{
                     'hovering': false
                 }}"
@@ -1084,15 +985,26 @@ class WorkerMainTable(BaseTailwindTable):
         )
 
     def render_worker(self, value):
+        
         return format_html(
             """
-        <div class="flex flex-col items-start">
+        <div class="flex flex-col items-start w-40">
             <p class="text-sm text-slate-900 ">{}</p>
             <p class="text-xs text-slate-400">{}</p>
         </div>
         """,
             value["name"],
             value["id"],
+        )
+    
+    def render_lastActive(self, value):
+        return format_html(
+            """
+            <div class="flex flex-col items-start">
+                <p class="text-sm text-slate-900 ">{}</p>
+            </div>
+            """,
+            value
         )
 
 class InvoicesListTable(BaseTailwindTable):
@@ -1115,16 +1027,9 @@ class InvoicesListTable(BaseTailwindTable):
         verbose_name="Added By",
         orderable=False,
     )
-    status = tables.TemplateColumn(
+    status = tables.Column(
         verbose_name="Status",
         orderable=False,
-        template_code="""
-            <div class="flex justify-start text-sm font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">
-               {% if value %}
-                  {% include "tailwind/components/badges/badge_sm.html" with bg_color=value.bgColor text=value.text text_color=value.color %}
-              {% endif%}
-            </div>
-        """,
     )
     paymentDate = tables.Column(
         verbose_name="Payment Date",
@@ -1207,24 +1112,241 @@ class InvoicesListTable(BaseTailwindTable):
                 display_index,
             )
 
+    def render_status(self, value, record=None):
+        return format_html(
+            '<span class="badge badge-sm bg-{0} text-{1}">{2}</span>',
+            value['bgColor'], value['color'], value['text']
+        )
 
 
-# class WorkerDeliveryTable(BaseTailwindTable):
-#     index = tables.Column(verbose_name="#", orderable=False)
-#     worker = tables.Column(verbose_name="Name", orderable=False)
-#     indicator = tables.TemplateColumn(
-#         verbose_name="Indicator",
-#         attrs={
-#             "td": {
-#                 "class": "p-0",
-#             }
-#         },
-#         orderable=False,
-#         template_code="""
-#                                     {% if value %}
-#                                        <div class="w-[40px]"><div class="w-4 h-2 rounded bg-{{ value }}"></div></div>
-#                                     {% else %}
-#                                         <div class="w-[40px]"><div class="w-4 h-2"></div></div>
-#                                     {% endif %}
-#                                     """,
-#     )
+class InvoicePaymentReportTable(BaseTailwindTable):
+    index = tables.Column(orderable=False)
+    paymentUnit = tables.Column(
+        verbose_name="Payment Unit",
+        orderable=False,
+    )
+    approvedUnit = tables.Column(
+        verbose_name="Approved Unit",
+        orderable=False,
+    )
+    userPaymentAccrued = tables.Column(
+        verbose_name="User Payment Accrued",
+        orderable=False,
+    )
+    networkManagerPaymentAccrued = tables.Column(
+        verbose_name="Network Manager Payment Accrued",
+        orderable=False,
+    )
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.base_columns['index'].verbose_name = mark_safe(
+            '''
+            <div class="flex justify-start text-sm font-medium text-brand-deep-purple">
+                <i
+                    x-on:click="toggleAll()"
+                    :class="isAllSelected() ? 'fa-regular fa-square-check' : 'fa-regular fa-square'"
+                    class="text-xl cursor-pointer text-brand-deep-purple"
+                ></i>
+            </div>
+            '''
+        )
+
+    class Meta:
+        
+        sequence = (
+            "index",
+            "paymentUnit",
+            "approvedUnit",
+            "userPaymentAccrued",
+            "networkManagerPaymentAccrued",
+        )
+
+    def render_index(self, value, record):
+            display_index = value
+
+            return format_html(
+                """
+                <div class="text-brand-deep-purple relative flex items-center justify-start h-full"
+                    x-data="{{
+                        'hovering': false
+                    }}"
+                    x-on:mouseenter="hovering = true"
+                    x-on:mouseleave="hovering = false">
+
+                    <!-- Show empty square when hovering and not selected -->
+                    <i x-show="!isRowSelected({0}) && hovering"
+                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square text-brand-deep-purple top-1/2"
+                    x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                    <!-- Show checked square when selected -->
+                    <i x-show="isRowSelected({0})"
+                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square-check text-brand-deep-purple top-1/2"
+                    x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                    <!-- Show number when not hovering and not selected -->
+                    <span x-show="!isRowSelected({0}) && !hovering"
+                        class="absolute pl-1 -translate-y-1/2 top-1/2">{0}</span>
+                </div>
+            """,
+                display_index,
+            )
+
+class MyOrganizationMembersTable(BaseTailwindTable):
+    index = tables.Column(orderable=False)
+    member = tables.Column(
+        verbose_name="Members",
+        orderable=False,
+    )
+    status = tables.TemplateColumn(
+        verbose_name="Status",
+        orderable=False,
+        template_code="""
+            <div class="flex justify-start text-sm font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">
+                {% if value %}
+                {% if value == 'active' %}
+                    <span class="badge badge-sm bg-green-600/20 text-green-600">{{value}}</span>
+                {% elif value == 'inactive' %}
+                    <span class="badge badge-sm bg-orange-600/20 text-orange-600">{{value}}</span>
+                {% elif value == 'ended' %}
+                    <span class="badge badge-sm bg-slate-100 text-slate-400">{{value}}</span>
+                {% endif %}
+               {% endif%}
+            </div>
+        """,
+    )
+    email = tables.Column(
+        verbose_name="Email",
+        orderable=False,
+    )
+    addedOn = tables.Column(
+        verbose_name="Added On",
+        orderable=False,
+    )
+    addedBy = tables.Column(
+        verbose_name="Added By",
+        orderable=False
+    )
+    role = tables.TemplateColumn(
+        verbose_name="Roles",
+        orderable=False,
+        template_code="""
+        <a href="#" class="underline underline-offset-4">{{value}}</a>
+        """
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.base_columns['index'].verbose_name = mark_safe(
+            '''
+            <div class="flex justify-start text-sm font-medium text-brand-deep-purple">
+                <i
+                    x-on:click="toggleAll()"
+                    :class="isAllSelected() ? 'fa-regular fa-square-check' : 'fa-regular fa-square'"
+                    class="text-xl cursor-pointer text-brand-deep-purple"
+                ></i>
+            </div>
+            '''
+        )
+
+    class Meta:
+        
+        sequence = (
+            "index",
+            "member",
+            "status",
+            "email",
+            "addedOn",
+            "addedBy",
+            "role",
+        )
+
+    def render_index(self, value, record):
+            display_index = value
+
+            return format_html(
+                """
+                <div class="text-brand-deep-purple relative flex items-center justify-start h-full"
+                    x-data="{{
+                        'hovering': false
+                    }}"
+                    x-on:mouseenter="hovering = true"
+                    x-on:mouseleave="hovering = false">
+
+                    <!-- Show empty square when hovering and not selected -->
+                    <i x-show="!isRowSelected({0}) && hovering"
+                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square text-brand-deep-purple top-1/2"
+                    x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                    <!-- Show checked square when selected -->
+                    <i x-show="isRowSelected({0})"
+                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square-check text-brand-deep-purple top-1/2"
+                    x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                    <!-- Show number when not hovering and not selected -->
+                    <span x-show="!isRowSelected({0}) && !hovering"
+                        class="absolute pl-1 -translate-y-1/2 top-1/2">{0}</span>
+                </div>
+            """,
+                display_index,
+            )
+
+class OpportunityWorkerLearnProgressTable(BaseTailwindTable):
+    index = tables.Column(
+        verbose_name="#",
+        orderable=False
+    )
+    moduleName = tables.Column(
+        verbose_name="Module Name",
+        orderable=False,
+    )
+    dateCompleted = tables.Column(
+        verbose_name="Date Completed",
+        orderable=False,
+    )
+    timeCompleted = tables.Column(
+        verbose_name="Time Completed",
+        orderable=False,
+    )
+    duration = tables.Column(
+        verbose_name="Duration",
+        orderable=False,
+    )
+
+    class Meta:
+        sequence = (
+            "index",
+            "moduleName",
+            "dateCompleted",
+            "timeCompleted",
+            "duration",
+        )
+
+class OpportunityWorkerPaymentTable(BaseTailwindTable):
+    index = tables.Column(
+        verbose_name="#",
+        orderable=False
+    )
+    amountPaid = tables.Column(
+        verbose_name="Amount Paid",
+        orderable=False,
+    )
+    dateCompleted = tables.Column(
+        verbose_name="Date Completed",
+        orderable=False,
+    )
+    timeCompleted = tables.Column(
+        verbose_name="Time Completed",
+        orderable=False,
+    )
+
+    class Meta:
+        sequence = (
+            "index",
+            "amountPaid",
+            "dateCompleted",
+            "timeCompleted",
+        )

@@ -1,55 +1,65 @@
-<span
+<div
   x-data="{
     open: false,
     dropdownStyle: '',
-    originalOverflow: '',
+    isHovered: false,
     calculatePosition() {
-      const badge = this.$el;
-      const badgeRect = badge.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+      const trigger = this.$el;
+      const triggerRect = trigger.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
+      const dropdown = this.$el.querySelector('.dropdown-content');
       
-      // Calculate available space
-      const spaceBelow = viewportHeight - badgeRect.bottom;
-      const shouldShowAbove = spaceBelow < 200 && badgeRect.top > 200;
-      
-      // Position calculation
-      let top = shouldShowAbove 
-        ? badgeRect.top + window.scrollY - 200
-        : badgeRect.bottom + window.scrollY;
-      
-      // Adjust for right edge
-      let left = Math.min(
-        badgeRect.left, 
-        viewportWidth - 220
-        );
-      
-      
-
-      this.dropdownStyle = `position: fixed; top: ${top}px; left: ${left}px;`;
+      setTimeout(() => {
+        const dropdownWidth = dropdown ? dropdown.offsetWidth : 220;
+        
+        let top = triggerRect.bottom + 16;
+        let left = Math.min(triggerRect.left, viewportWidth - dropdownWidth - 20);
+        
+        this.dropdownStyle = `position: fixed; top: ${top}px; left: ${left}px;`;
+        
+        window.addEventListener('scroll', () => {
+          if (this.open) {
+            const newTop = triggerRect.bottom + window.scrollY + 16;
+            this.dropdownStyle = `position: fixed; top: ${newTop}px; left: ${left}px;`;
+          }
+        }, { passive: true });
+      }, 0);
     },
     toggleDropdown() {
-      if (!this.open) {
-        this.originalOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-        this.calculatePosition();
-      } else {
-        document.body.style.overflow = this.originalOverflow || '';
-      }
       this.open = !this.open;
+      if (this.open) {
+        this.calculatePosition();
+      }
+    },
+    caretClick(e) {
+      if (e.target.closest('.dropdown-caret')) {
+        this.toggleDropdown();
+        e.stopPropagation();
+      }
+    },
+    closeDropdown() {
+      this.open = false;
     }
   }"
-  @click="toggleDropdown()"
-  @click.outside="open = false; document.body.style.overflow = originalOverflow || '';"
-  :class="{
-    '': open,
-    '': !open
-  }"
-  class="{{styles}}"
+  @mouseenter="isHovered = true"
+  @mouseleave="isHovered = false"
+  @click="caretClick($event)"
+  @click.outside="open = false"
+  @keydown.escape="closeDropdown()"
+  class="{{styles}} relative inline-flex items-center hover:[&_.dropdown-caret]:opacity-100"
 >
   {% autoescape off %}
   {{ text }}
   {% endautoescape %}
+  
+  <i
+    class="dropdown-caret ml-1 opacity-0 transition-opacity duration-200 cursor-pointer"
+    :class="{
+      'opacity-100': open || isHovered,
+      'fa-duotone fa-caret-up': open,
+      'fa-duotone fa-caret-down': !open
+    }"
+  ></i>
 
   <!-- Dropdown -->
   <div
@@ -62,30 +72,29 @@
     x-transition:leave-start="opacity-100 scale-100"
     x-transition:leave-end="opacity-0 scale-95"
     :style="dropdownStyle"
-    class="z-[9999] w-48 rounded-lg bg-white shadow-lg py-2 px-3 border border-gray-200 min-w-8"
+    class="dropdown-content z-50 w-48 rounded-lg bg-white shadow-lg py-2 px-3 border border-gray-200 min-w-8"
   >
     <p class="text-blue-light text-xs mb-1">{{ title|default:'' }}</p>
-    <div class="overflow-y-auto" >
+    <div class="overflow-y-auto">
       {% for item in list %}
-    {% if item.type == 'radio' %}
-    <div class="flex justify-start items-center gap-4 m-2">
-      <input type="radio" id={{item.name}} class="my-1 w-6 h-6 accent-brand-indigo" name="{{ text|lower }}_group" value="{{ item.name }}">
-      <label for="{{item.name}}">{{ item.name }}</label>
-    </div>
-    {% endif %}
-    {% if item.type == 'checkbox' %}
-      <input type="checkbox" name="{{ item.name }}">{{ item.name }}
-    {% endif %}
-    {% if item.type == 'meta' %}
-    {% if item.meta.sort == True %}
-    <button type="button" class='px-4 my-4 flex w-full items-center justify-between'><span>Sort</span> <i class="fa-light fa-arrow-up-arrow-down text-base"></i></button>
-    {% endif %}
-    {% endif %}
-    {% if item.type == 'text' %}
-      <!-- Add text-specific rendering here -->
-    {% endif %}
-  {% endfor %}
-       {% comment %} {{list}} {% endcomment %}
+        {% if item.type == 'radio' %}
+        <div class="flex justify-start items-center gap-4 m-2">
+          <input type="radio" id={{item.name}} class="my-1 w-6 h-6 accent-brand-indigo" name="{{ text|lower }}_group" value="{{ item.name }}">
+          <label for="{{item.name}}">{{ item.name }}</label>
+        </div>
+        {% endif %}
+        {% if item.type == 'checkbox' %}
+          <input type="checkbox" name="{{ item.name }}">{{ item.name }}
+        {% endif %}
+        {% if item.type == 'meta' %}
+        {% if item.meta.sort == True %}
+        <button type="button" class='px-4 my-4 flex w-full items-center justify-between'><span>Sort</span> <i class="fa-light fa-arrow-up-arrow-down text-base"></i></button>
+        {% endif %}
+        {% endif %}
+        {% if item.type == 'text' %}
+          <!-- Add text-specific rendering here -->
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
-</span>
+</div>
