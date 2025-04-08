@@ -40,12 +40,17 @@ def about(request, org_slug=None, opp_id=None):
 
 def worker(request, org_slug=None, opp_id=None):
     user_kpi = [
-           {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'false' },
-           {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'false' },
-           {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'true' },
-           {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'false' },
-           {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'true' },
+           {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'nil' },
+           {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'flagged' },
+           {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'rejected' },
+           {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'nil' },
+           {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'paid' },
         ]
+    flagged_info = [{'name': 'Location','correct': 5, 'wrong': 4},{'name': 'Form Duration','correct': 5, 'wrong': 4},{'name': 'Photos','correct': 5, 'wrong': 4},{'name': 'Flag Name 1','correct': 5, 'wrong': 4}]
+    rejected_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
+    payment_details = { 'date': '24 Feb, 2024', 'amount': "$6000"}
+    user_datapoints = [{'name': 'Data Points 1','value' : '45'}, {'name': 'Data Points 1','value' : '45'},{'name': 'Data Points 2','value' : '45'},{'name': 'Data Points 3','value' : '45'},{'name': 'Data Points 4','value' : '45'},{'name': 'Data Points 5','value' : '45'},{'name': 'Data Points 6','value' : '45'},{'name': 'Data Points 7','value' : '45'},{'name': 'Data Points 8','value' : '45'},]
+    user_timeline = [{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}, {'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'},{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}]
     data = [
         {"name": "Flagged", "count": "45", "url": "/tables"},
         {"name": "PM Review", "count": "45", "url": "/tables"},
@@ -54,8 +59,7 @@ def worker(request, org_slug=None, opp_id=None):
         {"name": "Rejected", "count": "45", "url": "/tables"},
         {"name": "All", "count": "45", "url": "/tables"},
     ]
-
-    return render(request, "tailwind/pages/worker.html", {"header_title": "Worker", "tabs": data, "kpi":user_kpi })
+    return render(request, "tailwind/pages/worker.html", {"header_title": "Worker", "tabs": data, "kpi":user_kpi , "datapoints":user_datapoints, "timeline":user_timeline, "flagged_info":flagged_info, "rejected_details":rejected_details, "payment_details":payment_details})
 
 
 def opportunities(request, org_slug=None, opp_id=None):
@@ -188,6 +192,7 @@ def opportunities(request, org_slug=None, opp_id=None):
 
 def flagged_workers(request, org_slug=None, opp_id=None):
     # Sample dynamic data (replace with your actual data source later)
+    flag_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
     data = [
         {
             "index": 1,
@@ -251,7 +256,7 @@ def flagged_workers(request, org_slug=None, opp_id=None):
         {"index": 35, "time": "15:00", "entityName": "Violla Maeya", "flags": ["Location", "Form Duration", "Photos"]},
     ]
     table = WorkerFlaggedTable(data)
-    return render(request, "tailwind/components/tables/worker_flagged_table.html", {"table": table})
+    return render(request, "tailwind/components/tables/worker_flagged_table.html", {"table": table,"flag_details":flag_details})
 
 
 def opportunity_visits(request, org_slug=None, opp_id=None):

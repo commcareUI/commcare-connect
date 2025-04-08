@@ -183,8 +183,14 @@
 
  
 /*-- chips ---------------------------------------*/ 
-.chips{
-    @apply inline-block text-nowrap text-sm font-medium rounded-full transition-all duration-300 cursor-pointer;
+@layer components{
+  
+}
+
+
+/*-- labels ---------------------------------------*/ 
+.lable{
+    @apply inline-block text-nowrap text-sm font-medium rounded-full border border-gray-300 px-4 py-1 text-gray-700;
 }
 
 /*-- tooltips ---------------------------------------*/ 
@@ -272,6 +278,22 @@
 }
 
 /*--- dropdown select list ------------------------- */
+
+/*--- dropdown select list ------------------------- */
+@layer components {
+    .base-dropdown {
+        @apply px-2 border border-gray-300 rounded-lg bg-white text-gray-600 h-10;
+    }
+    
+    .base-dropdown:focus{
+        @apply outline-1 outline-brand-indigo
+    }
+
+    .base-dropdown option {
+        @apply text-gray-900 w-full px-2;
+    }  
+}
+
 @layer components {
     .simple-dropdown {
         @apply relative h-12;
@@ -292,6 +314,18 @@
 }
 
 /*--- simple input list ------------------------- */
+
+@layer components{
+    .base-input{
+        @apply px-2 border border-gray-300 rounded-lg bg-white text-gray-600 h-10;
+    }
+
+    .base-input:focus{
+        @apply outline-1 outline-brand-indigo
+    }
+}
+
+
 @layer components{
     .simple-input{
         @apply relative h-12;
@@ -365,4 +399,29 @@
         @apply text-gray-600 text-xs flex items-center justify-center;
         display: flex;
     }
+}
+
+@layer components{
+    .simple-overflowmenu{
+        @apply  bg-white shadow-lg rounded p-4 min-w-40 max-w-64 list-none;
+    } 
+
+    .simple-overflowmenu li{
+        @apply p-2 cursor-pointer rounded text-sm;
+    }
+
+    .simple-overflowmenu li:hover{
+        @apply bg-gray-100;
+    }
+}
+
+/* Hide scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar */
+.scrollbar-hide {
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
 }
