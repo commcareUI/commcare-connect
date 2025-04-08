@@ -36,13 +36,24 @@
 <div
     class="table-footer w-full flex items-center justify-between h-14  bg-white  text-brand-deep-purple py-2 px-4 rounded-lg">
     {% include "tailwind/components/pagination.html" %}
-    <div class="flex flex-row gap-x-25 w-1/2 items-center justify-center px-4">
-        <span class="text-slate-900 ">Total</span>
-        <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
-        <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
-        <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
-        <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
-        
+    <div class="flex flex-row gap-x-12 w-1/2 items-center justify-center">
+        <span class="text-slate-900">Total</span>
+        <div class="flex flex-row gap-x-2 items-center">
+            <span>Delivered</span>
+            <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
+        </div>
+        <div class="flex flex-row gap-x-2 items-center">
+            <span>Pending</span>
+            <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
+        </div>
+        <div class="flex flex-row gap-x-2 items-center">
+            <span>Approved</span>
+            <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
+        </div>
+        <div class="flex flex-row gap-x-2 items-center">
+            <span>Rejected</span>
+            <span class="bg-brand-indigo/10 text-brand-indigo border-none px-2 py-1 rounded-full">189</span>
+        </div>        
     </div>
 </div>
 </div>
