@@ -89,11 +89,41 @@ class PaymentAppTable(BaseTailwindTable):
     def render_end_date(self, value):
         return format_html(
             """
-            <div>
-                {}
+            <div class="relative w-36" 
+                x-data="{{
+                    isOpen: false,
+                    init() {{
+                        const fp = flatpickr(this.$refs.input, {{
+                            dateFormat: 'd-M-Y',
+                            defaultDate: '{}',
+                            onChange: (selectedDates) => {{
+                                if (selectedDates?.[0]) {{
+                                    this.$dispatch('date-changed', selectedDates[0]);
+                                }}
+                            }},
+                            onOpen: () => {{
+                                this.isOpen = true;
+                            }},
+                            onClose: () => {{
+                                this.isOpen = false;
+                            }}
+                        }});
+                        this.fp = fp;
+                    }}
+                }}">
+                <input type="text"
+                    x-ref="input"
+                    class="border border-brand-border-light focus:outline-none rounded px-3 pr-8 py-2 w-full cursor-pointer"
+                    placeholder="Select date"
+                    value="{}"
+                    @click="fp.toggle()">
+                <i class="fa-solid fa-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-brand-deep-purple transition-transform duration-200 pointer-events-none"
+                   :class="{{'rotate-180': isOpen}}">
+                </i>
             </div>
             """,
             value,
+            value
         )    
     def render_amount(self, value):
         return format_html(
@@ -336,14 +366,44 @@ class AddBudgetTable(BaseTailwindTable):
     def render_end_date(self, value):
         return format_html(
             """
-            
-                <input type="date"
-                class="border w-32 border-brand-border-light focus:outline-none rounded p-2"
-                value="{}">
-            
+            <div class="relative w-36" 
+                x-data="{{
+                    isOpen: false,
+                    init() {{
+                        const fp = flatpickr(this.$refs.input, {{
+                            dateFormat: 'd-M-Y',
+                            defaultDate: '{}',
+                            onChange: (selectedDates) => {{
+                                if (selectedDates?.[0]) {{
+                                    this.$dispatch('date-changed', selectedDates[0]);
+                                }}
+                            }},
+                            onOpen: () => {{
+                                this.isOpen = true;
+                            }},
+                            onClose: () => {{
+                                this.isOpen = false;
+                            }}
+                        }});
+                    }}
+                }}">
+                <input type="text"
+                    x-ref="input"
+                    class="border border-brand-border-light focus:outline-none rounded px-3 pr-8 py-2 w-full"
+                    placeholder="Select date"
+                    value="{}">
+                <i class="fa-solid fa-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-brand-deep-purple transition-transform duration-200 cursor-pointer"
+                :class="{{'rotate-180': isOpen}}"
+                @click="$refs.input._flatpickr.toggle()">
+                </i>
+            </div>
             """,
             value,
+            value
         )
+
+
+
         
 class OpportunitiesListTable(tables.Table):
     index = tables.Column(verbose_name="")
@@ -708,6 +768,15 @@ class WorkerLearnTable(tables.Table):
     learning_hours = tables.Column(
         verbose_name="Learning Hours",
     )
+    action = tables.TemplateColumn(
+        verbose_name="",
+        orderable=False,
+        template_code="""
+            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-end">
+                <i class="fa-solid fa-chevron-right text-brand-deep-purple"></i>
+            </div>
+        """
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -734,14 +803,6 @@ class WorkerLearnTable(tables.Table):
         )
 
     class Meta:
-        attrs = {
-            "class": "w-full max-w-full",
-            # "thead": {"class": "hidden"},
-            "tbody": {"class": "block w-full h-full"},
-        }
-        row_attrs = {
-            "class": "flex text-slate-900 items-center text-xs justify-between h-14 px-3 w-full  hover:bg-gray-100 relative transition-colors duration-300"
-        }
         sequence = (
             "index",
             "worker",
@@ -753,6 +814,7 @@ class WorkerLearnTable(tables.Table):
             "assessment",
             "attempts",
             "learning_hours",
+            "action"
         )
         
     def render_index(self, value, record):
@@ -830,6 +892,9 @@ class WorkerDeliveryTable(BaseTailwindTable):
             {% endif %}
             """,
     )
+    lastActive = tables.Column(
+        verbose_name="Last Active",
+    )
     payment_units = tables.Column(
         verbose_name="Payment Units",
     )
@@ -848,18 +913,29 @@ class WorkerDeliveryTable(BaseTailwindTable):
     rejected = tables.Column(
         verbose_name="Rejected",
     )
+    action = tables.TemplateColumn(
+        verbose_name="",
+        orderable=False,
+        template_code="""
+            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-end">
+                <i class="fa-solid fa-chevron-right text-brand-deep-purple"></i>
+            </div>
+        """
+    )
 
     class Meta:
         sequence = (
             "index",
             "worker",
             "indicator",
+            "lastActive",
             "payment_units",
             "started",
             "delivered",
             "flagged",
             "approved",
             "rejected",
+            "action"  
         )
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1064,7 +1140,7 @@ class WorkerDeliveryTable(BaseTailwindTable):
             ]))
         )    
     def render_approved(self, value):
-        # Handle both string and dictionary values
+    # Handle both string and dictionary values
         if not isinstance(value, dict):
             count = value
             options = []
@@ -1113,26 +1189,15 @@ class WorkerDeliveryTable(BaseTailwindTable):
                     
                     <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-blue-light">
                         <span class="text-start font-normal">Approved Info</span>
-                    </div>
-                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-deep-purple flex justify-between">
-                        <span class="text-start">Auto</span>
-                        <span class="text-end">{}</span>
-                    </div>
-                    <div class="border-t border-brand-border-light my-2 mx-2"></div>
-                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-deep-purple flex justify-between">
-                        <span class="text-start">Manual</span>
-                        <span class="text-end">{}</span>
                     </div>                    
                     {}
                 </div>
             </div>
             """,
             count,
-            auto,
-            manual,
             mark_safe(''.join([
                 f"""
-                <div class="px-2 py-2 mx-2 text-sm text-brand-blue-light flex justify-between">
+                <div class="px-2 py-2 mx-2 text-sm text-brand-deep-purple flex justify-between">
                     <span class="text-start">{option['name']}</span>
                     <span class="text-end">{option['value']}</span>
                 </div>
@@ -1338,6 +1403,15 @@ class WorkerMainTable(BaseTailwindTable):
             }
         },
     )
+    action = tables.TemplateColumn(
+        verbose_name="",
+        orderable=False,
+        template_code="""
+            <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-end">
+                <i class="fa-solid fa-chevron-right text-brand-deep-purple"></i>
+            </div>
+        """
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1440,7 +1514,7 @@ class BaseWorkerTable(BaseTailwindTable):
             '''
             <div class="flex justify-start text-sm font-medium text-brand-deep-purple">
                 <i
-                    x-on:click="toggleAll()"
+                    x-on:click="toggleAll(); $dispatch('selection-changed', {selected: selectedRows})"
                     :class="isAllSelected() ? 'fa-regular fa-square-check' : 'fa-regular fa-square'"
                     class="text-xl cursor-pointer text-brand-deep-purple"
                 ></i>
@@ -1458,11 +1532,11 @@ class BaseWorkerTable(BaseTailwindTable):
                 
                 <i x-show="!isRowSelected({0}) && hovering"
                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square text-brand-deep-purple top-1/2"
-                   x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+                   x-on:click="toggleRow({0}); $dispatch('selection-changed', {{selected: selectedRows}}); $event.stopPropagation()"></i>
 
                 <i x-show="isRowSelected({0})"
                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square-check text-brand-deep-purple top-1/2"
-                   x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+                   x-on:click="toggleRow({0}); $dispatch('selection-changed', {{selected: selectedRows}}); $event.stopPropagation()"></i>
 
                 <span x-show="!isRowSelected({0}) && !hovering"
                       class="absolute pl-1 -translate-y-1/2 top-1/2">{0}</span>
@@ -1481,7 +1555,7 @@ class BaseWorkerTable(BaseTailwindTable):
         # Expect record['reportIcons'] to be a list of status strings.
         statuses = record.get("reportIcons", [])
         status_to_icon = {
-            "flag": "fa-light flag-swallowtail",
+            "flag": "fa-light fa-flag-swallowtail",
             "pending": "fa-light fa-timer",
             "partial": "fa-solid fa-circle-check text-slate-300/50",
             "reject": "fa-light fa-thumbs-down",
@@ -1495,11 +1569,11 @@ class BaseWorkerTable(BaseTailwindTable):
         for status in display_statuses:
             icon_class = status_to_icon.get(status, "")
             if icon_class:
-                icons_html += f'<i class="{icon_class} text-brand-deep-purple px-1.5"></i>'
+                icons_html += f'<i class="{icon_class} text-brand-deep-purple ml-4"></i>'
         # If only one icon, align it to the right.
         justify_class = "justify-end" if len(display_statuses) == 1 else "justify-between"
         return format_html(
-            '<div class="flex relative {} text-brand-deep-purple text-lg">{}</div>',
+            '<div class=" {} text-end text-brand-deep-purple text-lg">{}</div>',
             justify_class,
             mark_safe(icons_html),
         )

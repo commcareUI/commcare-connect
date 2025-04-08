@@ -5,7 +5,7 @@
     <div class="flex gap-4  items-center h-32 p-4 profile-bg bg-brand-indigo rounded-2xl">
         {% include "tailwind/components/worker_page/profile.html" %} 
         {% for data in kpi %}
-        {% include "tailwind/components/cards/kpi.html" with count=data.count text=data.name icon=data.icon drodown=data.dropdown %}  
+        {% include "tailwind/components/cards/kpi.html" with count=data.count text=data.name icon=data.icon dropdown=data.dropdown %}  
         {% endfor %} 
     </div>
     <div class="flex justify-center w-full">
@@ -13,7 +13,8 @@
         <div class="col-span-6">
           {% include "tailwind/components/worker_page/table_panel.html" %}
         </div>
-        <div class="col-span-4 relative" 
+        <div class="col-span-4 relative"
+             x-cloak 
              x-data="{ showFilter: false }"
              @toggle-filter.window="showFilter = !showFilter">
           <div x-show="!showFilter" 
@@ -24,7 +25,7 @@
                x-transition:leave-start="opacity-100"
                x-transition:leave-end="opacity-0"
                class="absolute inset-0">
-            {% include "tailwind/components/worker_page/detail_panel.html" %}
+            {% include "tailwind/components/worker_page/detail_panel.html" with flag_details=flag_details %}
           </div>
           <div x-show="showFilter"
                x-transition:enter="transition ease-out duration-200"

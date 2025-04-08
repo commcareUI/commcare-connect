@@ -274,12 +274,19 @@ def opportunities_card(request, org_slug=None, opp_id=None):
 
 def worker(request, org_slug=None, opp_id=None):
     user_kpi = [
-           {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'false' },
-           {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'false' },
-           {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'true' },
-           {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'false' },
-           {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'true' },
+            {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'nil' },
+            {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'flagged' },
+            {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'rejected' },
+            {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'nil' },
+            {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'paid' },
         ]
+    flags = [{'title': 'Location','desc':'Minimum distance between deliveries.','value' : '2.5m'}, {'title': 'Form Duration','desc':'Minimum time between deliveries.','value' : '10min'},{'title': 'Photos','desc':'Added media for proof'},{'title': 'GPS location','desc':'GPS location of the site is present'}]
+    flagged_info = [{'name': 'Location','correct': 5, 'wrong': 4},{'name': 'Form Duration','correct': 5, 'wrong': 4},{'name': 'Photos','correct': 5, 'wrong': 4},{'name': 'Flag Name 1','correct': 5, 'wrong': 4}]
+    rejected_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
+    payment_details = { 'date': '24 Feb, 2024', 'amount': "$6000"}
+    user_datapoints = [{'name': 'Data Points 1','value' : '45'}, {'name': 'Data Points 1','value' : '45'},{'name': 'Data Points 2','value' : '45'},{'name': 'Data Points 3','value' : '45'},{'name': 'Data Points 4','value' : '45'},{'name': 'Data Points 5','value' : '45'},{'name': 'Data Points 6','value' : '45'},{'name': 'Data Points 7','value' : '45'},{'name': 'Data Points 8','value' : '45'},]
+    user_timeline = [{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}, {'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'},{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}]
+    flag_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
     data = [
         {"name": "Flagged", "count": "45", "url": "/tables"},
         {"name": "PM Review", "count": "45", "url": "/tables"},
@@ -288,8 +295,21 @@ def worker(request, org_slug=None, opp_id=None):
         {"name": "Rejected", "count": "45", "url": "/tables"},
         {"name": "All", "count": "45", "url": "/tables"},
     ]
-    flags = [{'title': 'Location','desc':'Minimum distance between deliveries.','value' : '2.5m'}, {'title': 'Form Duration','desc':'Minimum time between deliveries.','value' : '10min'},{'title': 'Photos','desc':'Added media for proof'},{'title': 'GPS location','desc':'GPS location of the site is present'}]
-    return render(request, "tailwind/pages/worker.html", {"header_title": "Worker", "tabs": data, "kpi":user_kpi,"flags":flags })
+    return render(
+        request, 
+        "tailwind/pages/worker.html", 
+        {
+            "header_title": "Worker", 
+            "tabs": data, "kpi":user_kpi , 
+            "datapoints":user_datapoints, 
+            "timeline":user_timeline,
+            "flags":flags, 
+            "flagged_info":flagged_info, 
+            "rejected_details":rejected_details, 
+            "payment_details":payment_details,
+            "flag_details":flag_details
+            }
+        )
   
 def opportunities(request, org_slug=None, opp_id=None):
     path = ['programs','opportunities','opportunity name' ]
@@ -2236,7 +2256,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 2,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2282,7 +2302,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 3,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2328,7 +2348,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 4,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2374,7 +2394,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 5,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2420,7 +2440,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 6,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2466,7 +2486,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 7,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2512,7 +2532,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 8,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2558,7 +2578,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 9,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2604,7 +2624,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 10,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2650,7 +2670,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 11,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2696,7 +2716,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 12,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2742,7 +2762,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 13,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2788,7 +2808,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 14,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2834,7 +2854,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 15,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2880,7 +2900,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 16,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2926,7 +2946,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 17,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -2972,7 +2992,7 @@ def worker_delivery(request, org_slug=None, opp_id=None):
             },
         },
         {
-            "index": 1,
+            "index": 18,
             "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
             "indicator": "orange-600",
             "lastActive": "9hr ago",
@@ -3333,120 +3353,72 @@ def payment_history(request, org_slug=None, opp_id=None):
 
 def worker_flagged_table(request,org_slug=None,opp_id=None):
     data = [
-        {"index": 1,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"reportIcons":['cancelled']},
-        {"index": 2,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 3,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 4,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 5,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 6,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 7,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 8,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 9,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 1,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 2,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 3,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 4,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 5,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 6,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 7,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 8,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 9,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 1,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 2,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 3,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 4,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 5,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 6,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 7,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 8,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 9,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos']},
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], "reportIcons": ['flag']}
+        for i in range(25)
     ]
     table = FlaggedWorkerTable(data)    
     return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
 def worker_review_table(request,org_slug=None,opp_id=None):
     data = [
-        {"index": 1,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 2,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 3,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 4,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 5,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 6,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 7,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 8,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 9,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"}
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['pending','partial']}
+        for i in range(25)
     ]
     table = CommonWorkerTable(data)    
     return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
 def worker_revalidate_table(request,org_slug=None,opp_id=None):
     data = [
-        {"index": 1,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 2,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 3,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 4,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 5,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 6,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 7,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 8,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 9,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"}
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['reject','partial']}
+        for i in range(25)
     ]
     table = CommonWorkerTable(data)    
     return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
 def worker_approved_table(request,org_slug=None,opp_id=None):
     data = [
-        {"index": 1,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 2,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 3,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 4,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 5,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 6,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 7,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 8,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 9,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"}
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['accept','approved']}
+        for i in range(25)
     ]
     table = CommonWorkerTable(data)    
     return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
 def worker_rejected_table(request,org_slug=None,opp_id=None):
     data = [
-        {"index": 1,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 2,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 3,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 4,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 5,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 6,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 7,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 8,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 9,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 10,"time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"}
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['reject','cancelled']}
+        for i in range(25)
     ]
     table = CommonWorkerTable(data)    
     return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
 def worker_all_table(request,org_slug=None,opp_id=None):
+    # Possible icon combinations for the all table
+    icon_options = [
+        ['cancelled','partial'],
+        ['pending','reject'],
+        ['accept','approved'],
+        ['reject','partial'],
+        ['pending','partial'],
+        ['flag'],
+        ['approved'],
+        ['cancelled']
+    ]
+    
     data = [
-        {"index": 1,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025", "reportIcons":['cancelled','partial']},
-        {"index": 2,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025","reportIcons":['pending','reject']},
-        {"index": 3,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025","reportIcons":['accept','approved']},
-        {"index": 4,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 5,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 6,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 7,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 8,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 9,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"},
-        {"index": 10,"date":"12 Jul, 2024","time": "14:56","entity_name": "Viollo Maeya","flags": ['Location','Form Duration','Photos'],"last_activity":"12 Aug 2025"}
+        {
+            "index": i+1,
+            "date": "12 Jul, 2024",
+            "time": "14:56",
+            "entity_name": "Viollo Maeya",
+            "flags": ['Location','Form Duration','Photos'],
+            "last_activity": "12 Aug 2025",
+            "reportIcons": icon_options[i % len(icon_options)]  # Cycle through icon options
+        }
+        for i in range(25)
     ]
     table = AllWorkerTable(data)    
     return render(request, "tailwind/components/worker_page/table.html", {"table": table})
