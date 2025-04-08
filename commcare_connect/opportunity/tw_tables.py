@@ -812,6 +812,399 @@ class WorkerLearnTable(tables.Table):
     def render_learning_hours(self, value):
         return format_html('<div class="">{}</div>', value)
 
+class WorkerDeliveryTable(BaseTailwindTable):
+    index = tables.Column(
+        orderable=False,
+    )
+    worker = tables.Column(
+        verbose_name="Name",
+    )
+    indicator = tables.TemplateColumn(
+        verbose_name="Indicator",
+        orderable=False,
+        template_code="""
+            {% if value %}
+            <div class=""><div class="w-4 h-2 rounded bg-{{ value }}"></div></div>
+            {% else %}
+                <div class=""><div class=" h-2"></div></div>
+            {% endif %}
+            """,
+    )
+    payment_units = tables.Column(
+        verbose_name="Payment Units",
+    )
+    started = tables.Column(
+        verbose_name="Started",
+    )
+    delivered = tables.Column(
+        verbose_name="Delivered",
+    )
+    flagged = tables.Column(
+        verbose_name="Flagged",
+    )
+    approved = tables.Column(
+        verbose_name="Approved",
+    )
+    rejected = tables.Column(
+        verbose_name="Rejected",
+    )
+
+    class Meta:
+        sequence = (
+            "index",
+            "worker",
+            "indicator",
+            "payment_units",
+            "started",
+            "delivered",
+            "flagged",
+            "approved",
+            "rejected",
+        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Custom HTML for 'select' header (your toggle button)
+        self.base_columns['index'].verbose_name = mark_safe(
+            '''
+            <div class="flex justify-start text-sm font-medium text-brand-deep-purple">
+                <i
+                    x-on:click="toggleAll()"
+                    :class="isAllSelected() ? 'fa-regular fa-square-check' : 'fa-regular fa-square'"
+                    class="text-xl cursor-pointer text-brand-deep-purple"
+                ></i>
+            </div>
+            '''
+        )
+
+        self.base_columns['indicator'].verbose_name = mark_safe(
+            '''
+                <div class="w-[40px]">
+                    <div class="w-4 h-2 bg-black rounded"></div>
+                </div>
+            '''
+        )
+        
+    def render_index(self, value, record):
+        # Use 1-based indexing for display and storage
+        display_index = value
+
+        return format_html(
+            """
+            <div class="text-brand-deep-purple relative flex items-center justify-start w-full h-full"
+                x-data="{{
+                    'hovering': false
+                }}"
+                x-on:mouseenter="hovering = true"
+                x-on:mouseleave="hovering = false">
+
+                <!-- Show empty square when hovering and not selected -->
+                <i x-show="!isRowSelected({0}) && hovering"
+                class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square text-brand-deep-purple top-1/2"
+                x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                <!-- Show checked square when selected -->
+                <i x-show="isRowSelected({0})"
+                class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square-check text-brand-deep-purple top-1/2"
+                x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                <!-- Show number when not hovering and not selected -->
+                <span x-show="!isRowSelected({0}) && !hovering"
+                    class="absolute pl-1 -translate-y-1/2 top-1/2">{0}</span>
+            </div>
+        """,
+            display_index,
+        )
+
+    def render_worker(self, value):
+        return format_html(
+            """
+        <div class="flex flex-col items-start">
+            <p class="text-sm text-slate-900 ">{}</p>
+            <p class="text-xs text-slate-400">{}</p>
+        </div>
+        """,
+            value["name"],
+            value["id"],
+        )
+
+    def render_lastActive(self, value):
+        return format_html('<div">{}</div>', value)
+    
+    def render_payment_units(self, value):
+        return format_html('<div>{}</div>', value)
+    def render_started(self, value):
+        return format_html('<div>{}</div>', value)
+    
+    def render_delivered(self, value):
+        # Handle both string and dictionary values
+        if not isinstance(value, dict):
+            count = value
+            options = []
+        else:
+            count = value.get('count', 0)
+            options = value.get('options', [])
+
+        return format_html(
+            """
+            <div class="relative"
+                x-data="{{
+                    isOpen: false,
+                    positionDropdown() {{
+                        const rect = this.$el.getBoundingClientRect();
+                        const dropdown = this.$refs.dropdown;
+                        const windowHeight = window.innerHeight;
+                        const dropdownHeight = dropdown.offsetHeight;
+                        
+                        const spaceBelow = windowHeight - rect.bottom;
+                        const showBelow = spaceBelow >= dropdownHeight;
+                        
+                        const left = rect.left;
+                        const top = showBelow ? rect.bottom + 5 : rect.top - dropdownHeight - 5;
+                        
+                        dropdown.style.top = `${{top}}px`;
+                        dropdown.style.left = `${{left}}px`;
+                    }}
+                }}">
+                
+                <button class="button-icon"
+                        @click="isOpen = !isOpen; $nextTick(() => {{ if(isOpen) positionDropdown() }})"
+                        @click.outside="isOpen = false">{}</button>
+                
+                <div x-ref="dropdown"
+                    x-show="isOpen"
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="fixed z-50 w-48 py-2 bg-white rounded-lg shadow-md"
+                    style="display: none">
+                    
+                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-blue-light">
+                        <span class="text-start font-normal">Delivered Info</span>
+                    </div>                    
+                    {}
+                </div>
+            </div>
+            """,
+            count,
+            mark_safe(''.join([
+                f"""
+                <div class="px-2 py-2 mx-2 text-sm text-brand-deep-purple flex justify-between">
+                    <span class="text-start">{option['name']}</span>
+                    <span class="text-end">{option['value']}</span>
+                </div>
+                """
+                for option in options
+            ]))
+        )
+    def render_flagged(self, value):
+        # Handle both string and dictionary values
+        if not isinstance(value, dict):
+            count = value
+            options = []
+        else:
+            count = value.get('count', 0)
+            options = value.get('options', [])
+
+        return format_html(
+            """
+            <div class="relative"
+                x-data="{{
+                    isOpen: false,
+                    positionDropdown() {{
+                        const rect = this.$el.getBoundingClientRect();
+                        const dropdown = this.$refs.dropdown;
+                        const windowHeight = window.innerHeight;
+                        const dropdownHeight = dropdown.offsetHeight;
+                        
+                        const spaceBelow = windowHeight - rect.bottom;
+                        const showBelow = spaceBelow >= dropdownHeight;
+                        
+                        const left = rect.left;
+                        const top = showBelow ? rect.bottom + 5 : rect.top - dropdownHeight - 5;
+                        
+                        dropdown.style.top = `${{top}}px`;
+                        dropdown.style.left = `${{left}}px`;
+                    }}
+                }}">
+                
+                <button class="button-icon"
+                        @click="isOpen = !isOpen; $nextTick(() => {{ if(isOpen) positionDropdown() }})"
+                        @click.outside="isOpen = false">{}</button>        
+                <div x-ref="dropdown"
+                    x-show="isOpen"
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="fixed z-50 w-48 py-2 bg-white rounded-lg shadow-md"
+                    style="display: none">
+                    
+                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-blue-light">
+                        <span class="text-start font-normal">Flagged Info</span>
+                    </div>                    
+                    {}
+                </div>
+            </div>
+            """,
+            count,
+            mark_safe(''.join([
+                f"""
+                <div class="px-2 py-2 mx-2 text-sm text-brand-deep-purple flex justify-between">
+                    <span class="text-start">{option['name']}</span>
+                    <span class="text-end">{option['value']}</span>
+                </div>
+                """
+                for option in options
+            ]))
+        )    
+    def render_approved(self, value):
+        # Handle both string and dictionary values
+        if not isinstance(value, dict):
+            count = value
+            options = []
+        else:
+            count = value.get('count', 0)
+            options = value.get('options', [])
+            auto = value.get('auto', 0)
+            manual = value.get('manual', 0)
+
+        return format_html(
+            """
+            <div class="relative"
+                x-data="{{
+                    isOpen: false,
+                    positionDropdown() {{
+                        const rect = this.$el.getBoundingClientRect();
+                        const dropdown = this.$refs.dropdown;
+                        const windowHeight = window.innerHeight;
+                        const dropdownHeight = dropdown.offsetHeight;
+                        
+                        const spaceBelow = windowHeight - rect.bottom;
+                        const showBelow = spaceBelow >= dropdownHeight;
+                        
+                        const left = rect.left;
+                        const top = showBelow ? rect.bottom + 5 : rect.top - dropdownHeight - 5;
+                        
+                        dropdown.style.top = `${{top}}px`;
+                        dropdown.style.left = `${{left}}px`;
+                    }}
+                }}">
+                
+                <button class="button-icon"
+                    @click="isOpen = !isOpen; $nextTick(() => {{ if(isOpen) positionDropdown() }})"
+                    @click.outside="isOpen = false">{}</button>
+                
+                <div x-ref="dropdown"
+                    x-show="isOpen"
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="fixed z-50 w-48 py-2 bg-white rounded-lg shadow-md"
+                    style="display: none">
+                    
+                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-blue-light">
+                        <span class="text-start font-normal">Approved Info</span>
+                    </div>
+                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-deep-purple flex justify-between">
+                        <span class="text-start">Auto</span>
+                        <span class="text-end">{}</span>
+                    </div>
+                    <div class="border-t border-brand-border-light my-2 mx-2"></div>
+                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-deep-purple flex justify-between">
+                        <span class="text-start">Manual</span>
+                        <span class="text-end">{}</span>
+                    </div>                    
+                    {}
+                </div>
+            </div>
+            """,
+            count,
+            auto,
+            manual,
+            mark_safe(''.join([
+                f"""
+                <div class="px-2 py-2 mx-2 text-sm text-brand-blue-light flex justify-between">
+                    <span class="text-start">{option['name']}</span>
+                    <span class="text-end">{option['value']}</span>
+                </div>
+                """
+                for option in options
+            ]))
+        )
+
+    def render_rejected(self, value):
+        # Handle both string and dictionary values
+        if not isinstance(value, dict):
+            count = value
+            options = []
+        else:
+            count = value.get('count', 0)
+            options = value.get('options', [])
+
+        return format_html(
+            """
+            <div class="relative"
+                x-data="{{
+                    isOpen: false,
+                    positionDropdown() {{
+                        const rect = this.$el.getBoundingClientRect();
+                        const dropdown = this.$refs.dropdown;
+                        const windowHeight = window.innerHeight;
+                        const dropdownHeight = dropdown.offsetHeight;
+                        
+                        const spaceBelow = windowHeight - rect.bottom;
+                        const showBelow = spaceBelow >= dropdownHeight;
+                        
+                        const left = rect.left - dropdown.offsetWidth + rect.width;
+                        const top = showBelow ? rect.bottom + 5 : rect.top - dropdownHeight - 5;
+                        
+                        dropdown.style.top = `${{top}}px`;
+                        dropdown.style.left = `${{left}}px`;
+                    }}
+                }}">
+                
+                <button class="button-icon"
+                        @click="isOpen = !isOpen; $nextTick(() => {{ if(isOpen) positionDropdown() }})"
+                        @click.outside="isOpen = false">{}</button>
+                
+                <div x-ref="dropdown"
+                    x-show="isOpen"
+                    x-transition:enter="transition ease-out duration-100"
+                    x-transition:enter-start="opacity-0 scale-95"
+                    x-transition:enter-end="opacity-100 scale-100"
+                    x-transition:leave="transition ease-in duration-75"
+                    x-transition:leave-start="opacity-100 scale-100"
+                    x-transition:leave-end="opacity-0 scale-95"
+                    class="fixed z-50 w-48 py-2 bg-white rounded-lg shadow-md"
+                    style="display: none">
+                    
+                    <div class="px-2 py-2 rounded-md mx-2 text-sm text-brand-blue-light">
+                        <span class="text-start font-normal">Rejected Info</span>
+                    </div>                    
+                    {}
+                </div>
+            </div>
+            """,
+            count,
+            mark_safe(''.join([
+                f"""
+                <div class="px-2 py-2 mx-2 text-sm text-brand-deep-purple flex justify-between">
+                    <span class="text-start">{option['name']}</span>
+                    <span class="text-end">{option['value']}</span>
+                </div>
+                """
+                for option in options
+            ]))
+        )
 class PayWorker(BaseTailwindTable):
     index = tables.Column(verbose_name="#", orderable=False)
     worker = tables.Column(verbose_name="Worker")
@@ -1010,4 +1403,154 @@ class WorkerMainTable(BaseTailwindTable):
             value["name"],
             value["id"],
         )
+
+class BaseWorkerTable(BaseTailwindTable):
+    index = tables.Column(verbose_name="#", orderable=False)
+    time = tables.Column(verbose_name="Time", orderable=False)
+    entity_name = tables.Column(verbose_name="Entity Name", orderable=False)
+    flags = tables.TemplateColumn(
+        verbose_name="Flags",
+        orderable=False,
+        template_code="""
+            <div class="flex relative justify-start text-sm text-brand-deep-purple font-normal w-72">
+                {% if value %}
+                    {% for flag in value|slice:":2" %}
+                        {% include "tailwind/components/badges/badge_sm.html" with text=flag %}
+                    {% endfor %}
+                    {% if value|length > 2 %}
+                        {% include "tailwind/components/badges/badge_sm_dropdown.html" with title='All Flags' list=value %}
+                    {% endif %}
+                {% endif %}
+            </div>
+        """,
+    )
+    reportIcons = tables.TemplateColumn(
+        verbose_name="",
+        orderable=False,
+        template_code="""
+
+            """,
+    )
+    class Meta:
+        abstract = True
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.base_columns['index'].verbose_name = mark_safe(
+            '''
+            <div class="flex justify-start text-sm font-medium text-brand-deep-purple">
+                <i
+                    x-on:click="toggleAll()"
+                    :class="isAllSelected() ? 'fa-regular fa-square-check' : 'fa-regular fa-square'"
+                    class="text-xl cursor-pointer text-brand-deep-purple"
+                ></i>
+            </div>
+            '''
+        )
+
+    def render_index(self, value, record):
+        return format_html(
+            """
+            <div class="text-brand-deep-purple relative flex items-center justify-start w-full h-full"
+                x-data="{{'hovering': false}}"
+                x-on:mouseenter="hovering = true"
+                x-on:mouseleave="hovering = false">
+                
+                <i x-show="!isRowSelected({0}) && hovering"
+                   class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square text-brand-deep-purple top-1/2"
+                   x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                <i x-show="isRowSelected({0})"
+                   class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square-check text-brand-deep-purple top-1/2"
+                   x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                <span x-show="!isRowSelected({0}) && !hovering"
+                      class="absolute pl-1 -translate-y-1/2 top-1/2">{0}</span>
+            </div>
+            """,
+            value
+        )
+
+    def render_time(self, value):
+        return format_html('<div class="">{}</div>', value)
+
+    def render_entity_name(self, value):
+        return format_html('<div class="">{}</div>', value)
+    
+    def render_reportIcons(self, record):
+        # Expect record['reportIcons'] to be a list of status strings.
+        statuses = record.get("reportIcons", [])
+        status_to_icon = {
+            "flag": "fa-light flag-swallowtail",
+            "pending": "fa-light fa-timer",
+            "partial": "fa-solid fa-circle-check text-slate-300/50",
+            "reject": "fa-light fa-thumbs-down",
+            "accept": "fa-light fa-thumbs-up",
+            "approved": "fa-solid fa-circle-check",  # adjust style (solid) via CSS if needed
+            "cancelled": "fa-light fa-ban",
+        }
+        # Get (up to) first two statuses.
+        display_statuses = statuses[:2]
+        icons_html = ""
+        for status in display_statuses:
+            icon_class = status_to_icon.get(status, "")
+            if icon_class:
+                icons_html += f'<i class="{icon_class} text-brand-deep-purple px-1.5"></i>'
+        # If only one icon, align it to the right.
+        justify_class = "justify-end" if len(display_statuses) == 1 else "justify-between"
+        return format_html(
+            '<div class="flex relative {} text-brand-deep-purple text-lg">{}</div>',
+            justify_class,
+            mark_safe(icons_html),
+        )
+    
+
+
+class FlaggedWorkerTable(BaseWorkerTable):
+    class Meta:
+        sequence = (
+            "index",
+            "time",
+            "entity_name",
+            "flags",
+            "reportIcons",
+        )
+    
+class CommonWorkerTable(BaseWorkerTable):
+    last_activity = tables.Column(verbose_name="Last Activity", orderable=False)
+
+    class Meta:
+        sequence = (
+            "index",
+            "time",
+            "entity_name",
+            "flags",
+            "last_activity",
+            "reportIcons",
+            )
+
+    def render_last_activity(self, value):
+        return format_html('<div class="">{}</div>', value)
+    
+
+class AllWorkerTable(BaseWorkerTable):
+    date = tables.Column(verbose_name="Date", orderable=False)
+    last_activity = tables.Column(verbose_name="Last Activity", orderable=False)
+
+    class Meta:
+        sequence = (
+            "index",
+            "date",
+            "time",
+            "entity_name",
+            "flags",
+            "last_activity",
+            "reportIcons",
+        )
+
+    def render_date(self, value):
+        return format_html('<div class="">{}</div>', value)
+
+    def render_last_activity(self, value):
+        return format_html('<div class="">{}</div>', value)
 
