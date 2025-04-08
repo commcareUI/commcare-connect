@@ -5,7 +5,7 @@ from django.template import Template, Context
 
 from commcare_connect.opportunity.forms import AddBudgetExistingUsersForm
 
-from .tw_tables import OpportunitiesListTable, VisitsTable, WorkerFlaggedTable, WorkerMainTable, WorkerPaymentsTable, WorkerLearnTable, PayWorker, LearnAppTable, DeliveryAppTable, PaymentAppTable, AddBudgetTable
+from .tw_tables import OpportunitiesListTable, VisitsTable, WorkerFlaggedTable, WorkerMainTable, WorkerPaymentsTable, WorkerLearnTable, PayWorker, LearnAppTable, DeliveryAppTable, PaymentAppTable, AddBudgetTable, WorkerDeliveryTable, FlaggedWorkerTable, CommonWorkerTable, AllWorkerTable
 
 
 
@@ -274,12 +274,19 @@ def opportunities_card(request, org_slug=None, opp_id=None):
 
 def worker(request, org_slug=None, opp_id=None):
     user_kpi = [
-           {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'false' },
-           {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'false' },
-           {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'true' },
-           {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'false' },
-           {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'true' },
+            {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'nil' },
+            {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'flagged' },
+            {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'rejected' },
+            {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'nil' },
+            {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'paid' },
         ]
+    flags = [{'title': 'Location','desc':'Minimum distance between deliveries.','value' : '2.5m'}, {'title': 'Form Duration','desc':'Minimum time between deliveries.','value' : '10min'},{'title': 'Photos','desc':'Added media for proof'},{'title': 'GPS location','desc':'GPS location of the site is present'}]
+    flagged_info = [{'name': 'Location','correct': 5, 'wrong': 4},{'name': 'Form Duration','correct': 5, 'wrong': 4},{'name': 'Photos','correct': 5, 'wrong': 4},{'name': 'Flag Name 1','correct': 5, 'wrong': 4}]
+    rejected_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
+    payment_details = { 'date': '24 Feb, 2024', 'amount': "$6000"}
+    user_datapoints = [{'name': 'Data Points 1','value' : '45'}, {'name': 'Data Points 1','value' : '45'},{'name': 'Data Points 2','value' : '45'},{'name': 'Data Points 3','value' : '45'},{'name': 'Data Points 4','value' : '45'},{'name': 'Data Points 5','value' : '45'},{'name': 'Data Points 6','value' : '45'},{'name': 'Data Points 7','value' : '45'},{'name': 'Data Points 8','value' : '45'},]
+    user_timeline = [{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}, {'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'},{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}]
+    flag_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
     data = [
         {"name": "Flagged", "count": "45", "url": "/tables"},
         {"name": "PM Review", "count": "45", "url": "/tables"},
@@ -288,8 +295,21 @@ def worker(request, org_slug=None, opp_id=None):
         {"name": "Rejected", "count": "45", "url": "/tables"},
         {"name": "All", "count": "45", "url": "/tables"},
     ]
-
-    return render(request, "tailwind/pages/worker.html", {"header_title": "Worker", "tabs": data, "kpi":user_kpi })
+    return render(
+        request, 
+        "tailwind/pages/worker.html", 
+        {
+            "header_title": "Worker", 
+            "tabs": data, "kpi":user_kpi , 
+            "datapoints":user_datapoints, 
+            "timeline":user_timeline,
+            "flags":flags, 
+            "flagged_info":flagged_info, 
+            "rejected_details":rejected_details, 
+            "payment_details":payment_details,
+            "flag_details":flag_details
+            }
+        )
   
 def opportunities(request, org_slug=None, opp_id=None):
     path = ['programs','opportunities','opportunity name' ]
@@ -1811,12 +1831,1219 @@ def worker_learn(request, org_slug=None, opp_id=None):
             "attempts":"4",
             "learning_hours":"10h 19m"
         },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
         
     ]
 
     table = WorkerLearnTable(data)
     return render(request, "tailwind/pages/worker_learn.html",{ "table": table})
 
+def worker_delivery(request, org_slug=None, opp_id=None):
+    data = [
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": " ",
+            "worker": {"id": " ", "name": " "},
+            "indicator": " ",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 2,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 3,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 4,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 5,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 6,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 7,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 8,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 9,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 10,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 11,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 12,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 13,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 14,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 15,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 16,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 17,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 18,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        }
+    ]
+    
+    
+    table = WorkerDeliveryTable(data)
+    return render(request, "tailwind/pages/worker_delivery.html", {"table": table})
+    
+    
 def pay_worker(request, org_slug=None, opp_id=None):
 
     data = [
@@ -2124,3 +3351,74 @@ def payment_history(request, org_slug=None, opp_id=None):
 
     return render(request, "opportunity/tailwind/components/payment_history.html", {"data": data})
 
+def worker_flagged_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], "reportIcons": ['flag']}
+        for i in range(25)
+    ]
+    table = FlaggedWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_review_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['pending','partial']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_revalidate_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['reject','partial']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_approved_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['accept','approved']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_rejected_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['reject','cancelled']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_all_table(request,org_slug=None,opp_id=None):
+    # Possible icon combinations for the all table
+    icon_options = [
+        ['cancelled','partial'],
+        ['pending','reject'],
+        ['accept','approved'],
+        ['reject','partial'],
+        ['pending','partial'],
+        ['flag'],
+        ['approved'],
+        ['cancelled']
+    ]
+    
+    data = [
+        {
+            "index": i+1,
+            "date": "12 Jul, 2024",
+            "time": "14:56",
+            "entity_name": "Viollo Maeya",
+            "flags": ['Location','Form Duration','Photos'],
+            "last_activity": "12 Aug 2025",
+            "reportIcons": icon_options[i % len(icon_options)]  # Cycle through icon options
+        }
+        for i in range(25)
+    ]
+    table = AllWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
