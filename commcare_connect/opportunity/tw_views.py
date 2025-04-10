@@ -5,7 +5,7 @@ from django.template import Template, Context
 
 from commcare_connect.opportunity.forms import AddBudgetExistingUsersForm
 
-from .tw_tables import OpportunitiesListTable, VisitsTable, WorkerFlaggedTable, WorkerMainTable, WorkerPaymentsTable, WorkerLearnTable,PayWorker
+from .tw_tables import InvoicePaymentReportTable, InvoicesListTable, MyOrganizationMembersTable, OpportunitiesListTable, OpportunityWorkerLearnProgressTable, OpportunityWorkerPaymentTable, VisitsTable, WorkerFlaggedTable, WorkerMainTable, WorkerPaymentsTable, WorkerLearnTable, PayWorker, LearnAppTable, DeliveryAppTable, PaymentAppTable, AddBudgetTable, WorkerDeliveryTable, FlaggedWorkerTable, CommonWorkerTable, AllWorkerTable
 
 
 
@@ -141,8 +141,69 @@ def dashboard(request, org_slug=None, opp_id=None):
 
         ]
     }
+    return render(
+        request, 'tailwind/pages/dashboard.html', 
+        {
+            'data': data, 
+            'header_title': 'Dashboard', 
+            'sidenav_active': 'Programs'
+            }
+        )
+    
+def learn_app_table(request, org_slug=None, opp_id=None):
+    data = [
+        {"index": 1, "name": "Module Name 1", "description":"Additional Descriptio for module 1", "estimated_time": "1hr 30min"},
+        {"index": 2, "name": "Module Name 2", "description":"Additional Descriptio for module 2", "estimated_time": "30min"},
+        {"index": 3, "name": "Module Name 3", "description":"Additional Descriptio for module 3", "estimated_time": "30min"},
+        {"index": 4, "name": "Module Name 4", "description":"Additional Descriptio for module 4", "estimated_time": "45min"},
+        {"index": 1, "name": "Module Name 1", "description":"Additional Descriptio for module 1", "estimated_time": "1hr 30min"},
+        {"index": 2, "name": "Module Name 2", "description":"Additional Descriptio for module 2", "estimated_time": "30min"},
+        {"index": 3, "name": "Module Name 3", "description":"Additional Descriptio for module 3", "estimated_time": "30min"},
+        {"index": 4, "name": "Module Name 4", "description":"Additional Descriptio for module 4", "estimated_time": "45min"},
+        {"index": 1, "name": "Module Name 1", "description":"Additional Descriptio for module 1", "estimated_time": "1hr 30min"},
+        {"index": 2, "name": "Module Name 2", "description":"Additional Descriptio for module 2", "estimated_time": "30min"},
+        {"index": 3, "name": "Module Name 3", "description":"Additional Descriptio for module 3", "estimated_time": "30min"},
+        {"index": 4, "name": "Module Name 4", "description":"Additional Descriptio for module 4", "estimated_time": "45min"},
+        {"index": 1, "name": "Module Name 1", "description":"Additional Descriptio for module 1", "estimated_time": "1hr 30min"},
+        {"index": 2, "name": "Module Name 2", "description":"Additional Descriptio for module 2", "estimated_time": "30min"},
+        {"index": 3, "name": "Module Name 3", "description":"Additional Descriptio for module 3", "estimated_time": "30min"},
+        {"index": 4, "name": "Module Name 4", "description":"Additional Descriptio for module 4", "estimated_time": "45min"},
+        {"index": 1, "name": "Module Name 1", "description":"Additional Descriptio for module 1", "estimated_time": "1hr 30min"},
+        {"index": 2, "name": "Module Name 2", "description":"Additional Descriptio for module 2", "estimated_time": "30min"},
+        {"index": 3, "name": "Module Name 3", "description":"Additional Descriptio for module 3", "estimated_time": "30min"},
+        {"index": 4, "name": "Module Name 4", "description":"Additional Descriptio for module 4", "estimated_time": "45min"},
+        {"index": 1, "name": "Module Name 1", "description":"Additional Descriptio for module 1", "estimated_time": "1hr 30min"},
+        {"index": 2, "name": "Module Name 2", "description":"Additional Descriptio for module 2", "estimated_time": "30min"},
+        {"index": 3, "name": "Module Name 3", "description":"Additional Descriptio for module 3", "estimated_time": "30min"},
+        {"index": 4, "name": "Module Name 4", "description":"Additional Descriptio for module 4", "estimated_time": "45min"},
+        {"index": 1, "name": "Module Name 1", "description":"Additional Descriptio for module 1", "estimated_time": "1hr 30min"},
+        {"index": 2, "name": "Module Name 2", "description":"Additional Descriptio for module 2", "estimated_time": "30min"},
+        {"index": 3, "name": "Module Name 3", "description":"Additional Descriptio for module 3", "estimated_time": "30min"},
+        {"index": 4, "name": "Module Name 4", "description":"Additional Descriptio for module 4", "estimated_time": "45min"},
+    ]
+    table = LearnAppTable(data)
+    return render(request, 'tailwind/components/opportunity-dashboard/tables/table.html', {'table': table,'app_name':'Learn App Name'})
+def delivery_app_table(request, org_slug=None, opp_id=None):
+    data = [
+        {"index": 1, "unit_name": "Unit Name 1", "unit_id": "Unit ID 1"},
+        {"index": 2, "unit_name": "Unit Name 2", "unit_id": "Unit ID 2"},
+        {"index": 3, "unit_name": "Unit Name 3", "unit_id": "Unit ID 3"},
+        {"index": 4, "unit_name": "Unit Name 4", "unit_id": "Unit ID 4"},
+    ]
+    table = DeliveryAppTable(data)
+    return render(request, 'tailwind/components/opportunity-dashboard/tables/table.html', {'table': table,'app_name':'Delivery App Name'})
 
-    return render(request, 'tailwind/pages/dashboard.html', {'data': data, 'header_title': 'Dashboard', 'sidenav_active': 'Programs'})
+def payment_app_table(request,org_slug=None, opp_id=None):
+    data = [
+        {"index":1, "unit_name":"Payment Unit Name 1", "start_date":"2024-01-01", "end_date":"2024-12-31", "amount":100, "total_deliveries":145, "max_daily":3, "delivery_units":"10"},
+        {"index":2, "unit_name":"Payment Unit Name 2", "start_date":"2024-01-01", "end_date":"2024-12-31", "amount":100, "total_deliveries":145, "max_daily":3, "delivery_units":"10"},
+        {"index":3, "unit_name":"Payment Unit Name 3", "start_date":"2024-01-01", "end_date":"2024-12-31", "amount":100, "total_deliveries":145, "max_daily":3, "delivery_units":"10"},
+        {"index":4, "unit_name":"Payment Unit Name 4", "start_date":"2024-01-01", "end_date":"2024-12-31", "amount":100, "total_deliveries":145, "max_daily":3, "delivery_units":"10"},
+        {"index":5, "unit_name":"Payment Unit Name 5", "start_date":"2024-01-01", "end_date":"2024-12-31", "amount":100, "total_deliveries":145, "max_daily":3, "delivery_units":"10"},
+        {"index":6, "unit_name":"Payment Unit Name 6", "start_date":"2024-01-01", "end_date":"2024-12-31", "amount":100, "total_deliveries":145, "max_daily":3, "delivery_units":"10"},
+    ]
+    table = PaymentAppTable(data)
+    return render(request, 'tailwind/components/opportunity-dashboard/tables/table.html', {'table': table})
 
 def opportunities_card(request, org_slug=None, opp_id=None):
     data = [
@@ -213,12 +274,19 @@ def opportunities_card(request, org_slug=None, opp_id=None):
 
 def worker(request, org_slug=None, opp_id=None):
     user_kpi = [
-           {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'false' },
-           {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'false' },
-           {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'true' },
-           {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'false' },
-           {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'true' },
+            {"name":"Total Delieveries", "icon":"memo","count":234,"dropdown":'nil' },
+            {"name":"Flagged Delieveries", "icon":"flag-swallowtail","count":234,"dropdown":'flagged' },
+            {"name":"Rejected Delieveries", "icon":"thumbs-down","count":234,"dropdown":'rejected' },
+            {"name":"Accrued Payments", "icon":"money-bill-simple-wave","count":234,"dropdown":'nil' },
+            {"name":"Paid Payments", "icon":"hand-holding-dollar","count":234,"dropdown":'paid' },
         ]
+    flags = [{'title': 'Location','desc':'Minimum distance between deliveries.','value' : '2.5m'}, {'title': 'Form Duration','desc':'Minimum time between deliveries.','value' : '10min'},{'title': 'Photos','desc':'Added media for proof'},{'title': 'GPS location','desc':'GPS location of the site is present'}]
+    flagged_info = [{'name': 'Location','correct': 5, 'wrong': 4},{'name': 'Form Duration','correct': 5, 'wrong': 4},{'name': 'Photos','correct': 5, 'wrong': 4},{'name': 'Flag Name 1','correct': 5, 'wrong': 4}]
+    rejected_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
+    payment_details = { 'date': '24 Feb, 2024', 'amount': "$6000"}
+    user_datapoints = [{'name': 'Data Points 1','value' : '45'}, {'name': 'Data Points 1','value' : '45'},{'name': 'Data Points 2','value' : '45'},{'name': 'Data Points 3','value' : '45'},{'name': 'Data Points 4','value' : '45'},{'name': 'Data Points 5','value' : '45'},{'name': 'Data Points 6','value' : '45'},{'name': 'Data Points 7','value' : '45'},{'name': 'Data Points 8','value' : '45'},]
+    user_timeline = [{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}, {'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'},{'title': 'Event Title','desc':'Additional Supporting Message with the Event','date' : '24 Feb, 2024'}]
+    flag_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
     data = [
         {"name": "Flagged", "count": "45", "url": "/tables"},
         {"name": "PM Review", "count": "45", "url": "/tables"},
@@ -227,10 +295,22 @@ def worker(request, org_slug=None, opp_id=None):
         {"name": "Rejected", "count": "45", "url": "/tables"},
         {"name": "All", "count": "45", "url": "/tables"},
     ]
-
-    return render(request, "tailwind/pages/worker.html", {"header_title": "Worker", "tabs": data, "kpi":user_kpi })
-
-
+    return render(
+        request, 
+        "tailwind/pages/worker.html", 
+        {
+            "header_title": "Worker", 
+            "tabs": data, "kpi":user_kpi , 
+            "datapoints":user_datapoints, 
+            "timeline":user_timeline,
+            "flags":flags, 
+            "flagged_info":flagged_info, 
+            "rejected_details":rejected_details, 
+            "payment_details":payment_details,
+            "flag_details":flag_details
+            }
+        )
+  
 def opportunities(request, org_slug=None, opp_id=None):
     path = ['programs','opportunities','opportunity name' ]
     data = [
@@ -652,572 +732,520 @@ def opportunity_visits(request, org_slug=None, opp_id=None):
         },
     )
 
-
-def opportunities_list_table_view(request, org_slug=None, opp_id=None):
+def add_budget(request, org_slug=None, opp_id=None):
     data = [
         {
             "index": 1,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "AB12CD34EF56",
+            "name": "John Doe",
+            "max_visit": 120,
+            "used_visits": 89,
+            "end_date": "2025-07-12",
         },
         {
             "index": 2,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "XY98GH76IJ54",
+            "name": "Alice Smith",
+            "max_visit": 150,
+            "used_visits": 45,
+            "end_date": "2025-09-30",
         },
         {
             "index": 3,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "MN45KL89OP12",
+            "name": "Bob Johnson",
+            "max_visit": 100,
+            "used_visits": 72,
+            "end_date": "2026-02-15",
         },
         {
             "index": 4,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "QR23ST56UV78",
+            "name": "Emma Wilson",
+            "max_visit": 180,
+            "used_visits": 160,
+            "end_date": "2025-11-20",
         },
         {
             "index": 5,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "WX67YZ12AB34",
+            "name": "Michael Brown",
+            "max_visit": 90,
+            "used_visits": 25,
+            "end_date": "2026-05-10",
         },
         {
             "index": 6,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "KL34MN78OP56",
+            "name": "Sophia Martinez",
+            "max_visit": 130,
+            "used_visits": 98,
+            "end_date": "2025-08-21",
         },
         {
             "index": 7,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "UV12WX34YZ56",
+            "name": "James Anderson",
+            "max_visit": 170,
+            "used_visits": 140,
+            "end_date": "2026-04-05",
         },
         {
             "index": 8,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "CD78EF12GH34",
+            "name": "Olivia Taylor",
+            "max_visit": 200,
+            "used_visits": 180,
+            "end_date": "2025-12-25",
         },
         {
             "index": 9,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "IJ45KL67MN89",
+            "name": "William Harris",
+            "max_visit": 95,
+            "used_visits": 50,
+            "end_date": "2025-06-18",
         },
         {
             "index": 10,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "OP23QR45ST67",
+            "name": "Charlotte White",
+            "max_visit": 160,
+            "used_visits": 130,
+            "end_date": "2026-07-01",
         },
         {
             "index": 11,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "EF12GH34IJ56",
+            "name": "Benjamin Lewis",
+            "max_visit": 110,
+            "used_visits": 85,
+            "end_date": "2025-10-11",
         },
         {
             "index": 12,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "ST78UV12WX34",
+            "name": "Mia Scott",
+            "max_visit": 140,
+            "used_visits": 95,
+            "end_date": "2026-03-30",
         },
         {
             "index": 13,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "YZ45AB67CD89",
+            "name": "Elijah Hall",
+            "max_visit": 180,
+            "used_visits": 170,
+            "end_date": "2025-09-09",
         },
         {
             "index": 14,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "GH23IJ45KL67",
+            "name": "Amelia Young",
+            "max_visit": 125,
+            "used_visits": 110,
+            "end_date": "2026-01-25",
         },
         {
             "index": 15,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "MN78OP12QR34",
+            "name": "Lucas King",
+            "max_visit": 190,
+            "used_visits": 150,
+            "end_date": "2025-11-15",
         },
         {
             "index": 16,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "WX45YZ67AB89",
+            "name": "Harper Wright",
+            "max_visit": 105,
+            "used_visits": 70,
+            "end_date": "2026-06-20",
         },
         {
             "index": 17,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "CD12EF34GH56",
+            "name": "Henry Green",
+            "max_visit": 175,
+            "used_visits": 160,
+            "end_date": "2025-12-01",
         },
         {
             "index": 18,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "IJ78KL12MN34",
+            "name": "Evelyn Adams",
+            "max_visit": 115,
+            "used_visits": 90,
+            "end_date": "2026-05-17",
         },
         {
             "index": 19,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "OP45QR67ST89",
+            "name": "Alexander Nelson",
+            "max_visit": 145,
+            "used_visits": 120,
+            "end_date": "2025-08-05",
         },
         {
             "index": 20,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
+            "user_id": "UV23WX45YZ67",
+            "name": "Isabella Carter",
+            "max_visit": 135,
+            "used_visits": 100,
+            "end_date": "2026-02-22",
         },
     ]
+
+    table = AddBudgetTable(data)
+    return render(
+        request,
+        "tailwind/pages/add_budget.html",
+        {
+            "title": "Add Budget",
+            "table": table,
+            "opportunity_name": "Opportunity Name"
+        },
+    )
+def opportunities_list_table_view(request, org_slug=None, opp_id=None):
+    data = [
+    {
+        "index": 1,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]},
+    },
+    {
+        "index": 2,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 3,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "inactive",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 4,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 5,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "inactive",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 6,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 7,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 8,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 9,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "inactive",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 10,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 11,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 12,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "inactive",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 13,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "inactive",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 14,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 15,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 16,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link":"#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 17,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 18,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "inactive",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 19,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 20,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 21,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "inactive",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 22,
+        "opportunity": "Opportunity Name",
+        "entityType": "test",
+        "entityStatus": "active",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    },
+    {
+        "index": 23,
+        "opportunity": "Opportunity Name",
+        "entityType": "live",
+        "entityStatus": "ended",
+        "program": "Program Name",
+        "startDate": "12 Jul, 2025",
+        "endDate": "12 Aug, 2025",
+        "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"], "link": "#"},
+        "actions": {"list": ["View Opportunity", "View Worker", "View Invoices"]}
+    }
+]
+
+    # data = []
+    if len(data) == 0:
+        return render(request, "tailwind/components/placeholders/opportunities_list_table_placeholder.html")
 
     table = OpportunitiesListTable(data)
     return render(request, "tailwind/components/tables/opportunities_list_table-backup.html", {"table": table})
 
 
 def opportunities_list(request, org_slug=None, opp_id=None):
-    headers = {
-        "opportunities": [
-            {"type": "radio", "name": "All"},
-            {"type": "radio", "name": "Test"},
-            {"type": "radio", "name": "Live"},
-            {"type": "meta", "meta": {"sort": True}},
-        ],
-        "status": [
-            {
-                "type": "radio",
-                "name": "All",
-            },
-            {
-                "type": "radio",
-                "name": "Inactive",
-            },
-            {
-                "type": "radio",
-                "name": "Active",
-            },
-            {
-                "type": "radio",
-                "name": "Ended",
-            },
-        ],
-    }
-
-    data = [
-        {
-            "index": 1,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 2,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 3,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 4,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 5,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 6,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 7,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 8,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 9,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 10,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 11,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 12,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 13,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 14,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 15,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 16,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 17,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 18,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "inactive",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 19,
-            "opportunity": "Opportunity Name",
-            "entityType": "live",
-            "entityStatus": "ended",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-        {
-            "index": 20,
-            "opportunity": "Opportunity Name",
-            "entityType": "test",
-            "entityStatus": "active",
-            "program": "Program Name",
-            "startDate": "12 Jul, 2025",
-            "endDate": "12 Aug, 2025",
-            "pendingInvites": {"count": 76, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "inactiveWorkers": {"count": 44, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "pendingApprovals": {"count": 56, "list": ["View Opportunity", "View Worker", "View Invoices"]},
-            "paymentsDue": {"amount": "$123", "list": ["View Opportunity", "View Worker", "View Invoices"]},
-        },
-    ]
-
     return render(
         request,
         "tailwind/pages/opportunities_list.html",
-        {"headers": headers, "data": data, "header_title": "Opportunities List"},
+        {"header_title": "Opportunities List"},
     )
-
 
 def worker_payments(request, org_slug=None, opp_id=None):
     data = [
@@ -1424,6 +1452,392 @@ def worker_payments(request, org_slug=None, opp_id=None):
 def opportunity_worker(request, org_slug=None, opp_id=None):
     return render(request, "tailwind/pages/opportunity_worker.html", {"header_title": "Workers"})
 
+def invoice_list(request, org_slug=None, opp_id=None):
+    return render(request, "tailwind/pages/invoice_list.html", {"header_title": "Invoices"})
+
+def all_invoice_table(request, org_slug=None, opp_id=None):
+    data = [
+    {
+        "index": 1,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "500",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "raised", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 2,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "300",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "Approved", "color": "green-600", "bgColor": "green-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 3,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "450",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "paid", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 4,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "550",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "Approved", "color": "green-600", "bgColor": "green-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 5,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "100",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "rejected", "color": "orange-600", "bgColor": "orange-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 6,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "300",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "raised", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 7,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "700",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "Approved", "color": "green-600", "bgColor": "green-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 8,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "250",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "rejected", "color": "orange-600", "bgColor": "orange-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 9,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "400",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "raised", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "No",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 10,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "350",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "Approved", "color": "green-600", "bgColor": "green-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 11,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "500",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "raised", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 12,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "600",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "paid", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 13,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "200",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "Approved", "color": "green-600", "bgColor": "green-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 14,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "500",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "raised", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 15,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "150",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "rejected", "color": "orange-600", "bgColor": "orange-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 16,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "450",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "paid", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 17,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "550",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "raised", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 18,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "500",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "Approved", "color": "green-600", "bgColor": "green-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 19,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "100",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "rejected", "color": "orange-600", "bgColor": "orange-600/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    },
+    {
+        "index": 20,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "400",
+        "dateAdded": "12 Aug, 2025",
+        "addedBy": "person@mail.com",
+        "status": { "text": "raised", "color": "violet-500", "bgColor": "violet-500/20" },
+        "paymentDate": "12 Aug, 2025",
+        "serviceDelivery": "Yes",
+        "actions": { "list": ["Download Invoice"] }
+    }
+]
+
+    table = InvoicesListTable(data)
+    return render(request, "tailwind/components/tables/index_selectable_table.html",{ "table": table})
+
+def invoice_report_table(request, org_slug=None, opp_id=None):
+    data = [
+    {
+        "index": 1,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "10,495",
+        "userPaymentAccrued": "$2,350,495",
+        "networkManagerPaymentAccrued": "$2,350,495",
+    },
+    {
+        "index": 2,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "10,600",
+        "userPaymentAccrued": "$2,360,500",
+        "networkManagerPaymentAccrued": "$2,360,500",
+    },
+    {
+        "index": 3,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "10,750",
+        "userPaymentAccrued": "$2,370,750",
+        "networkManagerPaymentAccrued": "$2,370,750",
+    },
+    {
+        "index": 4,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "10,800",
+        "userPaymentAccrued": "$2,380,800",
+        "networkManagerPaymentAccrued": "$2,380,800",
+    },
+    {
+        "index": 5,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,000",
+        "userPaymentAccrued": "$2,400,000",
+        "networkManagerPaymentAccrued": "$2,400,000",
+    },
+    {
+        "index": 6,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,100",
+        "userPaymentAccrued": "$2,410,100",
+        "networkManagerPaymentAccrued": "$2,410,100",
+    },
+    {
+        "index": 7,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,200",
+        "userPaymentAccrued": "$2,420,200",
+        "networkManagerPaymentAccrued": "$2,420,200",
+    },
+    {
+        "index": 8,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,300",
+        "userPaymentAccrued": "$2,430,300",
+        "networkManagerPaymentAccrued": "$2,430,300",
+    },
+    {
+        "index": 9,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,500",
+        "userPaymentAccrued": "$2,450,500",
+        "networkManagerPaymentAccrued": "$2,450,500",
+    },
+    {
+        "index": 10,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,600",
+        "userPaymentAccrued": "$2,460,600",
+        "networkManagerPaymentAccrued": "$2,460,600",
+    },
+    {
+        "index": 11,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,800",
+        "userPaymentAccrued": "$2,480,800",
+        "networkManagerPaymentAccrued": "$2,480,800",
+    },
+    {
+        "index": 12,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "11,900",
+        "userPaymentAccrued": "$2,490,900",
+        "networkManagerPaymentAccrued": "$2,490,900",
+    },
+    {
+        "index": 13,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "12,000",
+        "userPaymentAccrued": "$2,500,000",
+        "networkManagerPaymentAccrued": "$2,500,000",
+    },
+    {
+        "index": 14,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "12,100",
+        "userPaymentAccrued": "$2,510,100",
+        "networkManagerPaymentAccrued": "$2,510,100",
+    },
+    {
+        "index": 15,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "12,300",
+        "userPaymentAccrued": "$2,530,300",
+        "networkManagerPaymentAccrued": "$2,530,300",
+    },
+    {
+        "index": 16,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "12,400",
+        "userPaymentAccrued": "$2,540,400",
+        "networkManagerPaymentAccrued": "$2,540,400",
+    },
+    {
+        "index": 17,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "12,600",
+        "userPaymentAccrued": "$2,560,600",
+        "networkManagerPaymentAccrued": "$2,560,600",
+    },
+    {
+        "index": 18,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "12,700",
+        "userPaymentAccrued": "$2,570,700",
+        "networkManagerPaymentAccrued": "$2,570,700",
+    },
+    {
+        "index": 19,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "12,900",
+        "userPaymentAccrued": "$2,590,900",
+        "networkManagerPaymentAccrued": "$2,590,900",
+    },
+    {
+        "index": 20,
+        "paymentUnit": "Payment Unit Name",
+        "approvedUnit": "13,000",
+        "userPaymentAccrued": "$2,600,000",
+        "networkManagerPaymentAccrued": "$2,600,000",
+    }
+]
+
+    table = InvoicePaymentReportTable(data)
+    return render(request, "tailwind/components/tables/index_selectable_table.html",{ "table": table})
+
+def invoice_report_card(request, org_slug=None, opp_id=None):
+    data = [
+        {"name": "Worker | <span class='font-medium'>Total</span> Accrued", "icon": "user-friends", "count": "$ 2,250,000"},
+        {"name": "Worker | <span class='font-medium'>Total</span> Paid", "icon": "user-friends", "count": "$ 2,250,000"},
+        {"name": "Organization | <span class='font-medium'>Total</span> Accrued", "icon": "building", "count": "$ 450,000"},
+        {"name": "Organization | <span class='font-medium'>Total</span> Paid", "icon": "building", "count": "$ 100,000"},
+    ]
+    return render(request, "tailwind/components/cards/invoice_report_card.html", {"data": data})
+
 def get_worker_last_payment(request, org_slug=None, opp_id=None):
     payments = [
         {"date": "12-Jul-2024", "amount": "₹4,780"},
@@ -1435,7 +1849,7 @@ def get_worker_last_payment(request, org_slug=None, opp_id=None):
     html = ""
     for payment in payments:
         html += f"""
-            <div class="flex justify-between py-1 items-center">
+            <div class="flex justify-between py-1 my-1 items-center">
                 <p class="text-xs text-brand-deep-purple">{payment['date']}</p>
                 <p class="text-sm text-slate-900">{payment['amount']}</p>
             </div>
@@ -1578,12 +1992,1219 @@ def worker_learn(request, org_slug=None, opp_id=None):
             "attempts":"4",
             "learning_hours":"10h 19m"
         },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
+        {
+            "index": 10,
+            "worker": {"id": "QR12ST34UV56", "name": "Amelia Brown"},
+            "indicator": "yellow-600",
+            "lastActive": "30hr ago",
+            "start_learning": "12-Aug-2025",
+            "modules_completed": "50",
+            "completed_learning": "12-Aug-2025",
+            "assessment":"Passed",
+            "attempts":"4",
+            "learning_hours":"10h 19m"
+        },
         
     ]
 
     table = WorkerLearnTable(data)
     return render(request, "tailwind/pages/worker_learn.html",{ "table": table})
 
+def worker_delivery(request, org_slug=None, opp_id=None):
+    data = [
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": " ",
+            "worker": {"id": " ", "name": " "},
+            "indicator": " ",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        },
+        {
+            "index": 1,
+            "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"},
+            "indicator": "orange-600",
+            "lastActive": "9hr ago",
+            "payment_units": "Name of the Payment Units",
+            "started": "12-Aug-2025",
+            "delivered": {
+                "count": 2,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over Limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "flagged": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+            "approved": {
+                "count": 2,
+                "auto": 26,
+                "manual": 50,
+                "options": [
+                    {"name": "Completed", "value": 25},
+                    {"name": "Duplicate", "value": 50},
+                    {"name": "Over limit", "value": 75},
+                    {"name": "Incomplete", "value": 100},
+                ],
+            },
+            "rejected": {
+                "count": 2,
+                "options": [
+                    {"name": "Location", "value": 25},
+                    {"name": "Form Duration", "value": 50},
+                    {"name": "Photos", "value": 75},
+                    {"name": "Flag Name 1", "value": 100},
+                ],
+            },
+        }
+    ]
+    
+    
+    table = WorkerDeliveryTable(data)
+    return render(request, "tailwind/pages/worker_delivery.html", {"table": table})
+    
+    
 def pay_worker(request, org_slug=None, opp_id=None):
 
     data = [
@@ -1735,22 +3356,24 @@ def pay_worker(request, org_slug=None, opp_id=None):
 
 def worker_main(request, org_slug=None, opp_id=None):
     data = [
-        {"index": 1, "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"}, "indicator": "green-600", "lastActive": "22-Aug-2025", "inviteDate": "22-Aug-2025", "startedLearn": "22-Aug-2025", "completedLearn": "22-Aug-2025", "daysToCompleteLearn": "22-Aug-2025"},
-        {"index": 2, "worker": {"id": "AB34YZ56LM90", "name": "John Doe"}, "indicator": "blue-500", "lastActive": "23-Aug-2025", "inviteDate": "23-Aug-2025", "startedLearn": "23-Aug-2025", "completedLearn": "23-Aug-2025", "daysToCompleteLearn": "23-Aug-2025"},
-        {"index": 3, "worker": {"id": "BC45KL67OP89", "name": "Emma Smith"}, "indicator": "red-700", "lastActive": "24-Aug-2025", "inviteDate": "24-Aug-2025", "startedLearn": "24-Aug-2025", "completedLearn": "24-Aug-2025", "daysToCompleteLearn": "24-Aug-2025"},
-        {"index": 4, "worker": {"id": "CD56MN78QR12", "name": "Michael Johnson"}, "indicator": "yellow-300", "lastActive": "25-Aug-2025", "inviteDate": "25-Aug-2025", "startedLearn": "25-Aug-2025", "completedLearn": "25-Aug-2025", "daysToCompleteLearn": "25-Aug-2025"},
-        {"index": 5, "worker": {"id": "EF67OP89RS23", "name": "Sophia Brown"}, "indicator": "orange-500", "lastActive": "26-Aug-2025", "inviteDate": "26-Aug-2025", "startedLearn": "26-Aug-2025", "completedLearn": "26-Aug-2025", "daysToCompleteLearn": "26-Aug-2025"},
-        {"index": 6, "worker": {"id": "GH78QR90ST34", "name": "Daniel Lee"}, "indicator": "green-700", "lastActive": "27-Aug-2025", "inviteDate": "27-Aug-2025", "startedLearn": "27-Aug-2025", "completedLearn": "27-Aug-2025", "daysToCompleteLearn": "27-Aug-2025"},
-        {"index": 7, "worker": {"id": "IJ89ST01UV45", "name": "Olivia Harris"}, "indicator": "purple-400", "lastActive": "28-Aug-2025", "inviteDate": "28-Aug-2025", "startedLearn": "28-Aug-2025", "completedLearn": "28-Aug-2025", "daysToCompleteLearn": "28-Aug-2025"},
-        {"index": 8, "worker": {"id": "KL90UV12WX56", "name": "James Wilson"}, "indicator": "blue-400", "lastActive": "29-Aug-2025", "inviteDate": "29-Aug-2025", "startedLearn": "29-Aug-2025", "completedLearn": "29-Aug-2025", "daysToCompleteLearn": "29-Aug-2025"},
-        {"index": 9, "worker": {"id": "MN01VW23XY67", "name": "Charlotte Scott"}, "indicator": "pink-500", "lastActive": "30-Aug-2025", "inviteDate": "30-Aug-2025", "startedLearn": "30-Aug-2025", "completedLearn": "30-Aug-2025", "daysToCompleteLearn": "30-Aug-2025"},
-        {"index": 10, "worker": {"id": "OP12XY34ZA89", "name": "William Moore"}, "indicator": "cyan-600", "lastActive": "31-Aug-2025", "inviteDate": "31-Aug-2025", "startedLearn": "31-Aug-2025", "completedLearn": "31-Aug-2025", "daysToCompleteLearn": "31-Aug-2025"},
-        {"index": 11, "worker": {"id": "QR23YZ45AB01", "name": "Ava Clark"}, "indicator": "brown-700", "lastActive": "01-Sep-2025", "inviteDate": "01-Sep-2025", "startedLearn": "01-Sep-2025", "completedLearn": "01-Sep-2025", "daysToCompleteLearn": "01-Sep-2025"},
-        {"index": 12, "worker": {"id": "ST34AB56CD12", "name": "Lucas Lewis"}, "indicator": "teal-500", "lastActive": "02-Sep-2025", "inviteDate": "02-Sep-2025", "startedLearn": "02-Sep-2025", "completedLearn": "02-Sep-2025", "daysToCompleteLearn": "02-Sep-2025"},
-        {"index": 13, "worker": {"id": "UV45BC67EF23", "name": "Amelia Walker"}, "indicator": "grey-400", "lastActive": "03-Sep-2025", "inviteDate": "03-Sep-2025", "startedLearn": "03-Sep-2025", "completedLearn": "03-Sep-2025", "daysToCompleteLearn": "03-Sep-2025"},
-        {"index": 14, "worker": {"id": "WX56DE78FG34", "name": "Mason Allen"}, "indicator": "lime-500", "lastActive": "04-Sep-2025", "inviteDate": "04-Sep-2025", "startedLearn": "04-Sep-2025", "completedLearn": "04-Sep-2025", "daysToCompleteLearn": "04-Sep-2025"},
-        {"index": 15, "worker": {"id": "YZ67FG89HI45", "name": "Ethan Harris"}, "indicator": "indigo-600", "lastActive": "05-Sep-2025", "inviteDate": "05-Sep-2025", "startedLearn": "05-Sep-2025", "completedLearn": "05-Sep-2025", "daysToCompleteLearn": "05-Sep-2025"}
+        {"index": 1, "worker": {"id": "UV23WX45YZ67", "name": "Isabella Carter"}, "indicator": "green-600", "lastActive": "22-Aug-2025", "inviteDate": "22-Aug-2025", "startedLearn": "22-Aug-2025", "completedLearn": "22-Aug-2025", "daysToCompleteLearn": "22-Aug-2025", "firstDeliveryDate": "25-Aug-2025", "daysToStartDelivery": "3 days"},
+        {"index": 2, "worker": {"id": "AB34YZ56LM90", "name": "John Doe"}, "indicator": "blue-500", "lastActive": "23-Aug-2025", "inviteDate": "23-Aug-2025", "startedLearn": "23-Aug-2025", "completedLearn": "23-Aug-2025", "daysToCompleteLearn": "23-Aug-2025", "firstDeliveryDate": "26-Aug-2025", "daysToStartDelivery": "3 days"},
+        {"index": 3, "worker": {"id": "BC45KL67OP89", "name": "Emma Smith"}, "indicator": "red-700", "lastActive": "24-Aug-2025", "inviteDate": "24-Aug-2025", "startedLearn": "24-Aug-2025", "completedLearn": "24-Aug-2025", "daysToCompleteLearn": "24-Aug-2025", "firstDeliveryDate": "27-Aug-2025", "daysToStartDelivery": "3 days"},
+        {"index": 4, "worker": {"id": "CD56MN78QR12", "name": "Michael Johnson"}, "indicator": "yellow-300", "lastActive": "25-Aug-2025", "inviteDate": "25-Aug-2025", "startedLearn": "25-Aug-2025", "completedLearn": "25-Aug-2025", "daysToCompleteLearn": "25-Aug-2025", "firstDeliveryDate": "28-Aug-2025", "daysToStartDelivery": "3 days"},
+        {"index": 5, "worker": {"id": "EF67OP89RS23", "name": "Sophia Brown"}, "indicator": "orange-500", "lastActive": "26-Aug-2025", "inviteDate": "26-Aug-2025", "startedLearn": "26-Aug-2025", "completedLearn": "26-Aug-2025", "daysToCompleteLearn": "26-Aug-2025", "firstDeliveryDate": "29-Aug-2025", "daysToStartDelivery": "3 days"},
+        {"index": 6, "worker": {"id": "GH78QR90ST34", "name": "Daniel Lee"}, "indicator": "green-700", "lastActive": "27-Aug-2025", "inviteDate": "27-Aug-2025", "startedLearn": "27-Aug-2025", "completedLearn": "27-Aug-2025", "daysToCompleteLearn": "27-Aug-2025", "firstDeliveryDate": "30-Aug-2025", "daysToStartDelivery": "3 days"},
+        {"index": 7, "worker": {"id": "IJ89ST01UV45", "name": "Olivia Harris"}, "indicator": "purple-400", "lastActive": "28-Aug-2025", "inviteDate": "28-Aug-2025", "startedLearn": "28-Aug-2025", "completedLearn": "28-Aug-2025", "daysToCompleteLearn": "28-Aug-2025", "firstDeliveryDate": "31-Aug-2025", "daysToStartDelivery": "3 days"},
+        {"index": 8, "worker": {"id": "KL90UV12WX56", "name": "James Wilson"}, "indicator": "blue-400", "lastActive": "29-Aug-2025", "inviteDate": "29-Aug-2025", "startedLearn": "29-Aug-2025", "completedLearn": "29-Aug-2025", "daysToCompleteLearn": "29-Aug-2025", "firstDeliveryDate": "01-Sep-2025", "daysToStartDelivery": "3 days"},
+        {"index": 9, "worker": {"id": "MN01VW23XY67", "name": "Charlotte Scott"}, "indicator": "pink-500", "lastActive": "30-Aug-2025", "inviteDate": "30-Aug-2025", "startedLearn": "30-Aug-2025", "completedLearn": "30-Aug-2025", "daysToCompleteLearn": "30-Aug-2025", "firstDeliveryDate": "02-Sep-2025", "daysToStartDelivery": "3 days"},
+        {"index": 10, "worker": {"id": "OP12XY34ZA89", "name": "William Moore"}, "indicator": "cyan-600", "lastActive": "31-Aug-2025", "inviteDate": "31-Aug-2025", "startedLearn": "31-Aug-2025", "completedLearn": "31-Aug-2025", "daysToCompleteLearn": "31-Aug-2025", "firstDeliveryDate": "03-Sep-2025", "daysToStartDelivery": "3 days"},
+        {"index": 11, "worker": {"id": "QR23YZ45AB01", "name": "Ava Clark"}, "indicator": "brown-700", "lastActive": "01-Sep-2025", "inviteDate": "01-Sep-2025", "startedLearn": "01-Sep-2025", "completedLearn": "01-Sep-2025", "daysToCompleteLearn": "01-Sep-2025", "firstDeliveryDate": "04-Sep-2025", "daysToStartDelivery": "3 days"},
+        {"index": 12, "worker": {"id": "ST34AB56CD12", "name": "Lucas Lewis"}, "indicator": "teal-500", "lastActive": "02-Sep-2025", "inviteDate": "02-Sep-2025", "startedLearn": "02-Sep-2025", "completedLearn": "02-Sep-2025", "daysToCompleteLearn": "02-Sep-2025", "firstDeliveryDate": "05-Sep-2025", "daysToStartDelivery": "3 days"},
+        {"index": 13, "worker": {"id": "UV45BC67EF23", "name": "Amelia Walker"}, "indicator": "grey-400", "lastActive": "03-Sep-2025", "inviteDate": "03-Sep-2025", "startedLearn": "03-Sep-2025", "completedLearn": "03-Sep-2025", "daysToCompleteLearn": "03-Sep-2025", "firstDeliveryDate": "06-Sep-2025", "daysToStartDelivery": "3 days"},
+        {"index": 14, "worker": {"id": "WX56DE78FG34", "name": "Mason Allen"}, "indicator": "lime-500", "lastActive": "04-Sep-2025", "inviteDate": "04-Sep-2025", "startedLearn": "04-Sep-2025", "completedLearn": "04-Sep-2025", "daysToCompleteLearn": "04-Sep-2025", "firstDeliveryDate": "07-Sep-2025", "daysToStartDelivery": "3 days"},
+        {"index": 15, "worker": {"id": "YZ67FG89HI45", "name": "Ethan Harris"}, "indicator": "indigo-600", "lastActive": "05-Sep-2025", "inviteDate": "05-Sep-2025", "startedLearn": "05-Sep-2025", "completedLearn": "05-Sep-2025", "daysToCompleteLearn": "05-Sep-2025", "firstDeliveryDate": "08-Sep-2025", "daysToStartDelivery": "3 days"}
     ]
+
+
 
     table = WorkerMainTable(data)
     return render(request, "tailwind/pages/worker_main.html",{ "table": table})
@@ -1891,3 +3514,176 @@ def payment_history(request, org_slug=None, opp_id=None):
 
     return render(request, "opportunity/tailwind/components/payment_history.html", {"data": data})
 
+def worker_flagged_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], "reportIcons": ['flag']}
+        for i in range(25)
+    ]
+    table = FlaggedWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_review_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['pending','partial']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_revalidate_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['reject','partial']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_approved_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['accept','approved']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_rejected_table(request,org_slug=None,opp_id=None):
+    data = [
+        {"index": i+1, "time": "14:56", "entity_name": "Viollo Maeya", "flags": ['Location','Form Duration','Photos'], 
+         "last_activity": "12 Aug 2025", "reportIcons": ['reject','cancelled']}
+        for i in range(25)
+    ]
+    table = CommonWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def worker_all_table(request,org_slug=None,opp_id=None):
+    # Possible icon combinations for the all table
+    icon_options = [
+        ['cancelled','partial'],
+        ['pending','reject'],
+        ['accept','approved'],
+        ['reject','partial'],
+        ['pending','partial'],
+        ['flag'],
+        ['approved'],
+        ['cancelled']
+    ]
+    
+    data = [
+        {
+            "index": i+1,
+            "date": "12 Jul, 2024",
+            "time": "14:56",
+            "entity_name": "Viollo Maeya",
+            "flags": ['Location','Form Duration','Photos'],
+            "last_activity": "12 Aug 2025",
+            "reportIcons": icon_options[i % len(icon_options)]  # Cycle through icon options
+        }
+        for i in range(25)
+    ]
+    table = AllWorkerTable(data)    
+    return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+def my_organization(request, org_slug=None, opp_id=None):
+     return render(request, "tailwind/pages/my_organization.html", {"header_title": "My Organization"})
+
+def my_organization_members_table(request, org_slug=None, opp_id=None):
+    data = [
+        {"index": 1, "member": "John Doe", "status": "active", "email": "5A0oR@example.com", "addedOn": "12-Jul-2025", "addedBy": "John Doe", "role": "Admin"},
+        {"index": 2, "member": "Jane Smith", "status": "inactive", "email": "jane.smith@example.com", "addedOn": "15-Jul-2025", "addedBy": "John Doe", "role": "User"},
+        {"index": 3, "member": "Alice Brown", "status": "active", "email": "alice.brown@example.com", "addedOn": "20-Jul-2025", "addedBy": "John Doe", "role": "Manager"},
+        {"index": 4, "member": "Bob Johnson", "status": "active", "email": "bob.johnson@example.com", "addedOn": "21-Jul-2025", "addedBy": "Jane Smith", "role": "User"},
+        {"index": 5, "member": "Charlie Davis", "status": "inactive", "email": "charlie.davis@example.com", "addedOn": "22-Jul-2025", "addedBy": "Alice Brown", "role": "Admin"},
+        {"index": 6, "member": "David Lee", "status": "active", "email": "david.lee@example.com", "addedOn": "23-Jul-2025", "addedBy": "Bob Johnson", "role": "Manager"},
+        {"index": 7, "member": "Eva Green", "status": "inactive", "email": "eva.green@example.com", "addedOn": "25-Jul-2025", "addedBy": "David Lee", "role": "User"},
+        {"index": 8, "member": "Frank White", "status": "active", "email": "frank.white@example.com", "addedOn": "28-Jul-2025", "addedBy": "Eva Green", "role": "Admin"},
+        {"index": 9, "member": "Grace King", "status": "active", "email": "grace.king@example.com", "addedOn": "30-Jul-2025", "addedBy": "Frank White", "role": "Manager"},
+        {"index": 10, "member": "Hannah Scott", "status": "inactive", "email": "hannah.scott@example.com", "addedOn": "01-Aug-2025", "addedBy": "Grace King", "role": "User"},
+        {"index": 11, "member": "Ian Harris", "status": "active", "email": "ian.harris@example.com", "addedOn": "05-Aug-2025", "addedBy": "Hannah Scott", "role": "Admin"},
+        {"index": 12, "member": "Jack Thomas", "status": "inactive", "email": "jack.thomas@example.com", "addedOn": "07-Aug-2025", "addedBy": "Ian Harris", "role": "User"},
+        {"index": 13, "member": "Katherine Adams", "status": "active", "email": "katherine.adams@example.com", "addedOn": "10-Aug-2025", "addedBy": "Jack Thomas", "role": "Manager"},
+        {"index": 14, "member": "Liam Carter", "status": "inactive", "email": "liam.carter@example.com", "addedOn": "12-Aug-2025", "addedBy": "Katherine Adams", "role": "Admin"},
+        {"index": 15, "member": "Monica Clark", "status": "active", "email": "monica.clark@example.com", "addedOn": "15-Aug-2025", "addedBy": "Liam Carter", "role": "User"},
+        {"index": 16, "member": "Nathaniel Walker", "status": "active", "email": "nathaniel.walker@example.com", "addedOn": "17-Aug-2025", "addedBy": "Monica Clark", "role": "Manager"},
+        {"index": 17, "member": "Olivia Hall", "status": "inactive", "email": "olivia.hall@example.com", "addedOn": "20-Aug-2025", "addedBy": "Nathaniel Walker", "role": "User"},
+        {"index": 18, "member": "Paul Allen", "status": "active", "email": "paul.allen@example.com", "addedOn": "22-Aug-2025", "addedBy": "Olivia Hall", "role": "Admin"},
+        {"index": 19, "member": "Quincy Adams", "status": "active", "email": "quincy.adams@example.com", "addedOn": "25-Aug-2025", "addedBy": "Paul Allen", "role": "Manager"},
+        {"index": 20, "member": "Rachel Young", "status": "inactive", "email": "rachel.young@example.com", "addedOn": "28-Aug-2025", "addedBy": "Quincy Adams", "role": "User"}
+    ]
+    
+    table = MyOrganizationMembersTable(data)
+    return render(request, "tailwind/components/tables/index_selectable_table.html",{ "table": table})
+
+def opportunity_worker_learn_progress(request, org_slug=None, opp_id=None):
+    user_kpi = [
+           {"name":"<span class='font-medium'>Total Time</span> Learning", "icon":"book-open-cover","count":"19hr 12min" },
+    ]
+    data = [
+        {
+            "index": 1,
+            "moduleName": "Module 1",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+            "duration": "19hr 12min",
+        },
+        {
+            "index": 2,
+            "moduleName": "Module 2",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+            "duration": "19hr 12min",
+        },
+        {
+            "index": 3,
+            "moduleName": "Module 3",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+            "duration": "19hr 12min",
+        },
+        {
+            "index": 4,
+            "moduleName": "Module 4",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+            "duration": "19hr 12min",
+        },
+    ]
+    table = OpportunityWorkerLearnProgressTable(data)
+    return render(request, "tailwind/pages/opportunity_worker_extended.html", {"header_title": "Worker", "kpi":user_kpi, "tab_name": "Learn Progress", "table": table })    
+
+
+def opportunity_worker_payment(request, org_slug=None, opp_id=None):
+    user_kpi = [
+           {"name":"<span class='font-medium'>Accrued</span> Payment", "icon":"money-bill-wave","count":"$4,780" },
+           {"name":"<span class='font-medium'>Due</span> Payment", "icon":"timer","count":"$1,780", "dropdown":"True" },
+           {"name":"<span class='font-medium'>Paid</span> Payment", "icon":"hand-holding-dollar","count":"$3,000", "dropdown":"True" },
+    ]
+    data = [
+        {
+            "index": 1,
+            "amountPaid": "$4,800",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+        },
+        {
+            "index": 2,
+            "amountPaid": "$4,800",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+        },
+        {
+            "index": 3,
+            "amountPaid": "$4,800",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+        },
+        {
+            "index": 4,
+            "amountPaid": "$4,800",
+            "dateCompleted": "12-Aug-2025",
+            "timeCompleted": "14:56",
+        },
+    ]
+    table = OpportunityWorkerPaymentTable(data)
+    return render(request, "tailwind/pages/opportunity_worker_extended.html", {"header_title": "Worker", "kpi":user_kpi, "tab_name": "Payment", "table": table })    
