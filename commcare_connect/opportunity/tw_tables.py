@@ -67,7 +67,34 @@ class PaymentAppTable(BaseTailwindTable):
     amount = tables.Column(verbose_name="Amount")
     total_deliveries = tables.Column(verbose_name="Total Deliveries")
     max_daily = tables.Column(verbose_name="Max Daily")
-    delivery_units = tables.Column(verbose_name="Delivery Units")
+    delivery_units = tables.TemplateColumn(
+        template_code='''
+        <div class="flex justify-between">
+            <span>{{ value }}</span>
+            <div x-data="{ expanded: false }">
+                <button class="btn btn-primary btn-sm"
+                        hx-get="/a/test-1/opportunity/1/tw/api/payment_app_expand?index={{record.index}}"
+                        hx-target="closest tr"
+                        hx-swap="afterend"
+                        @click="expanded = true"
+                        x-show="!expanded">
+                    <i class="fa-light fa-chevron-down"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm"
+                        @click="$event.preventDefault(); 
+                                const detailRow = $el.closest('tr').nextElementSibling; 
+                                if (detailRow && detailRow.classList.contains('detail-row-{{record.index}}')) { 
+                                    detailRow.remove(); 
+                                } 
+                                expanded = false"
+                        x-show="expanded">
+                    <i class="fa-light fa-chevron-up"></i>
+                </button>
+            </div>
+        </div>
+        ''',
+        verbose_name="Delivery Units"
+    )
     
     class Meta:
         sequence = ("index", "unit_name", "start_date", "end_date", "amount", "total_deliveries", "max_daily", "delivery_units")
@@ -117,7 +144,7 @@ class PaymentAppTable(BaseTailwindTable):
                     class="border border-brand-border-light focus:outline-none rounded px-3 pr-8 py-2 w-full cursor-pointer"
                     placeholder="Select date"
                     value="{}"
-                    @click="fp.toggle()">
+                    ">
                 <i class="fa-solid fa-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-brand-deep-purple transition-transform duration-200 pointer-events-none"
                    :class="{{'rotate-180': isOpen}}">
                 </i>
@@ -141,15 +168,34 @@ class PaymentAppTable(BaseTailwindTable):
             '<div class="">{}</div>', value
         )
     
-    def render_delivery_units(self, value):
-        return format_html(
-            '''<div class="flex justify-between">
-                    <span>{}</span>
-                    <i class="fa-light fa-chevron-down"></i>
-                </div>
-            ''', value
-        )
-       
+    # def render_delivery_units(self, value):
+    #     return format_html(
+    #         '''<div class="flex justify-between">
+    #                 <span>{}</span>
+    #                 <div x-data="{{ expanded: false }}">
+    #                     <button class="btn btn-primary btn-sm"
+    #                     hx-get="http:localhost:3000/expand?year=2024&quarter=1"
+    #                     hx-target="closest tr"
+    #                     hx-swap="afterend"
+    #                     @click="expanded = true"
+    #                     x-show="!expanded">
+    #                     <i class="fa-light fa-chevron-down"></i>
+    #                     </button>
+    #                     <button class="btn btn-secondary btn-sm"
+    #                     @click="$event.preventDefault(); 
+    #                             const detailRow = $el.closest('tr').nextElementSibling; 
+    #                             if (detailRow && detailRow.classList.contains('detail-row-1')) { 
+    #                                 detailRow.remove(); 
+    #                             } 
+    #                             expanded = false"
+    #                     x-show="expanded">
+    #                     <i class="fa-light fa-chevron-up"></i>
+    #                     </button>
+    #                 </div>
+    #             </div>
+    #         ''', value
+    #     )
+        
 class WorkerFlaggedTable(BaseTailwindTable):
     index = tables.Column(verbose_name="", orderable=False)
     time = tables.Column(verbose_name="Time")
@@ -160,8 +206,8 @@ class WorkerFlaggedTable(BaseTailwindTable):
         template_code="""
             <div class="flex relative justify-start text-sm text-brand-deep-purple font-normal w-72">
                 {% if value %}
-                    {% for flag in value|slice:":2" %}
-                        {% include "tailwind/components/badges/badge_sm.html" with text=flag %}
+                    {% for flag in value|slice:":2" %} 
+                        <span class="badge badge-sm label">flag</span>
                     {% endfor %}
                     {% if value|length > 2 %}
                         {% include "tailwind/components/badges/badge_sm_dropdown.html" with title='All Flags' list=value %}
@@ -395,7 +441,7 @@ class AddBudgetTable(BaseTailwindTable):
                     value="{}">
                 <i class="fa-solid fa-caret-down absolute right-3 top-1/2 -translate-y-1/2 text-brand-deep-purple transition-transform duration-200 cursor-pointer"
                 :class="{{'rotate-180': isOpen}}"
-                @click="$refs.input._flatpickr.toggle()">
+                ">
                 </i>
             </div>
             """,
@@ -498,11 +544,24 @@ class OpportunitiesListTable(BaseTailwindTable):
             </div>
         ''')
 
-        self.base_columns['inactiveWorkers'].verbose_name = mark_safe(f'''
-            <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
-                Inactive Workers
+
+        self.base_columns['inactiveWorkers'].verbose_name = mark_safe('''
+            <div class="relative inline-flex items-center group cursor-default">
+                <span>Inactive Workers</span>
+                <!-- Tooltip container - positioned relative to viewport -->
+                <div class="fixed hidden group-hover:block z-50 pointer-events-none"
+                    style="transform: translate(-15%,-70%);">
+                    <!-- Arrow -->
+                    <div class="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-white"></div>
+                    
+                    <!-- Tooltip content with proper arrow -->
+                    <div class="relative bg-white w-40 rounded p-2 text-slate-500 text-xs whitespace-normal break-words">
+                        Inactive Workers who haven't completed any deliveries in the past 3 days or more
+                    </div>
+                </div>
             </div>
-        ''')
+            ''')
+
 
         self.base_columns['pendingApprovals'].verbose_name = mark_safe(f'''
             <div class="flex justify-start items-center text-sm font-medium text-brand-deep-purple">
@@ -1673,8 +1732,8 @@ class BaseWorkerTable(BaseTailwindTable):
         template_code="""
             <div class="flex relative justify-start text-sm text-brand-deep-purple font-normal w-72">
                 {% if value %}
-                    {% for flag in value|slice:":2" %}
-                        {% include "tailwind/components/badges/badge_sm.html" with text=flag %}
+                    {% for flag in value|slice:":2" %} 
+                         <span class="badge badge-sm label">flag</span>
                     {% endfor %}
                     {% if value|length > 2 %}
                         {% include "tailwind/components/badges/badge_sm_dropdown.html" with title='All Flags' list=value %}
