@@ -157,4 +157,5 @@ urlpatterns = [
     # API
     path("<int:opp_id>/tw/api/payment_history/", tw_views.payment_history, name="tw_payment_history"),
     path("<int:opp_id>/tw/api/opportunities/", tw_views.opportunities_card, name="tw_opportunities_card"),
+    path("<int:opp_id>/tw/worker/details",tw_views.detail_panel, name="tw_detail_panel"),
 ]

@@ -3422,3 +3422,7 @@ def worker_all_table(request,org_slug=None,opp_id=None):
     ]
     table = AllWorkerTable(data)    
     return render(request, "tailwind/components/worker_page/table.html", {"table": table})
+
+def detail_panel(request,org_slug=None,opp_id=None):
+    flag_details = [{'name': 'location', 'count':4}, {'name': 'form duration', 'count':4},{'name': 'photos', 'count':4},{'name': 'flag name 1', 'count':4}]
+    return render(request, "tailwind/components/worker_page/detail_panel.html", {"flag_details": flag_details})

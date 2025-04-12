@@ -25,7 +25,8 @@
                x-transition:leave-start="opacity-100"
                x-transition:leave-end="opacity-0"
                class="absolute inset-0">
-            {% include "tailwind/components/worker_page/detail_panel.html" with flag_details=flag_details %}
+               <div id="detail-panel-content"></div>
+            {% comment %} {% include "tailwind/components/worker_page/detail_panel.html" with flag_details=flag_details %} {% endcomment %}
           </div>
           <div x-show="showFilter"
                x-transition:enter="transition ease-out duration-200"

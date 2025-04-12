@@ -1478,7 +1478,7 @@ class WorkerMainTable(BaseTailwindTable):
             value["id"],
         )
 
-class BaseWorkerTable(BaseTailwindTable):
+class BaseWorkerTable(tables.Table):
     index = tables.Column(verbose_name="#", orderable=False)
     time = tables.Column(verbose_name="Time", orderable=False)
     entity_name = tables.Column(verbose_name="Entity Name", orderable=False)
@@ -1506,7 +1506,8 @@ class BaseWorkerTable(BaseTailwindTable):
             """,
     )
     class Meta:
-        abstract = True
+        template_name ="tailwind/components/worker_page/template.html"
+        
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

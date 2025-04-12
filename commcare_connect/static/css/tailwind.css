@@ -454,6 +454,20 @@
 
     .base-table tbody td{
         @apply p-4 text-left border-b-[1px] border-gray-100 whitespace-nowrap;
+    }
+    .base-table tbody tr.selected {
+        @apply relative;
+    }
+
+    .base-table tbody tr.selected::after {
+        content: '';
+        @apply absolute top-1/2 -translate-y-1/2 w-2 h-[50%] bg-brand-mango rounded-l-lg opacity-100 z-[-5];
+
+    }
+
+    /* Adjust the hover state to not conflict with selected state */
+    .base-table tbody tr:not(.selected):hover::after {
+        @apply opacity-100 bg-gray-100;
     }  
 }
 
