@@ -1987,8 +1987,9 @@ class InvoicesListTable(BaseTailwindTable):
 
     def render_status(self, value, record=None):
         return format_html(
-            '<span class="badge badge-sm bg-{0} text-{1}">{2}</span>',
-            value['bgColor'], value['color'], value['text']
+            '<span @click="$dispatch(\'open-status-modal\', { status: \'{}\' })" class="badge badge-sm bg-[#16A34A33] text-[#16A34A] px-3 cursor-pointer">{}</span>',
+            value['text'],
+            value['text']
         )
 
 
@@ -2223,3 +2224,118 @@ class OpportunityWorkerPaymentTable(BaseTailwindTable):
             "dateCompleted",
             "timeCompleted",
         )
+
+class PMInvoicesTable(BaseTailwindTable):
+
+
+    index = tables.Column(orderable=False)
+    invoiceNumber = tables.Column(
+        verbose_name="Invoice Number",
+        orderable=False,
+    )
+    amount = tables.Column(
+        verbose_name="Amount",
+        orderable=False,
+    )
+    dateAdded = tables.Column(
+        verbose_name="Date Added",
+        orderable=False,
+    )
+    addedBy = tables.Column(
+        verbose_name="Added By",
+        orderable=False,
+    )
+    status = tables.Column(
+        verbose_name="Status",
+        orderable=False,
+    )
+    paymentDate = tables.Column(
+        verbose_name="Payment Date",
+        orderable=False,
+    )
+    actions = tables.TemplateColumn(
+        verbose_name="",
+        orderable=False,
+        template_code="""
+          <div class="flex justify-center w-4 text-sm font-normal truncate text-brand-deep-purple overflow-clip overflow-ellipsis">
+               {% if value %}
+              {% include "tailwind/components/dropdowns/text_button_dropdown.html" with text='...' list=value.list styles='text-sm' %}
+          {% endif%}
+          </div>
+        """,
+    )
+
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.base_columns['index'].verbose_name = mark_safe(
+            '''
+            <div class="flex justify-start text-sm font-medium text-brand-deep-purple">
+                <i
+                    x-on:click="toggleAll()"
+                    :class="isAllSelected() ? 'fa-regular fa-square-check' : 'fa-regular fa-square'"
+                    class="text-xl cursor-pointer text-brand-deep-purple"
+                ></i>
+            </div>
+            '''
+        )
+
+    class Meta:
+        
+        sequence = (
+            "index",
+            "invoiceNumber",
+            "amount",
+            "dateAdded",
+            "addedBy",
+            "status",
+            "paymentDate",
+            "actions",
+        )
+
+    def render_index(self, value, record):
+            display_index = value
+
+            return format_html(
+                """
+                <div class="text-brand-deep-purple relative flex items-center justify-start h-full"
+                    x-data="{{
+                        'hovering': false
+                    }}"
+                    x-on:mouseenter="hovering = true"
+                    x-on:mouseleave="hovering = false">
+
+                    <!-- Show empty square when hovering and not selected -->
+                    <i x-show="!isRowSelected({0}) && hovering"
+                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square text-brand-deep-purple top-1/2"
+                    x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                    <!-- Show checked square when selected -->
+                    <i x-show="isRowSelected({0})"
+                    class="absolute text-xl -translate-y-1/2 cursor-pointer fa-regular fa-square-check text-brand-deep-purple top-1/2"
+                    x-on:click="toggleRow({0}); $event.stopPropagation()"></i>
+
+                    <!-- Show number when not hovering and not selected -->
+                    <span x-show="!isRowSelected({0}) && !hovering"
+                        class="absolute pl-1 -translate-y-1/2 top-1/2">{0}</span>
+                </div>
+            """,
+                display_index,
+            )
+
+    def render_status(self, value, record=None):
+        if value == "paid":
+            return format_html(
+                '<span class="badge badge-sm bg-[#16A34A33] text-[#16A34A]">Paid</span>'
+            )
+        else:  
+            return format_html(
+                """
+                <span @click="$dispatch('open-status-modal')" 
+                      class="border border-brand-border-light text-brand-deep-purple p-2 bg-slate-50 font-medium rounded-lg cursor-pointer">
+                    Mark as Paid
+                </span>
+                """
+            )

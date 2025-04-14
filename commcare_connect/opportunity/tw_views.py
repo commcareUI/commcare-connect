@@ -5,7 +5,7 @@ from django.template import Template, Context
 
 from commcare_connect.opportunity.forms import AddBudgetExistingUsersForm
 
-from .tw_tables import InvoicePaymentReportTable, InvoicesListTable, MyOrganizationMembersTable, OpportunitiesListTable, OpportunityWorkerLearnProgressTable, OpportunityWorkerPaymentTable, VisitsTable, WorkerFlaggedTable, WorkerMainTable, WorkerPaymentsTable, WorkerLearnTable, PayWorker, LearnAppTable, DeliveryAppTable, PaymentAppTable, AddBudgetTable, WorkerDeliveryTable, FlaggedWorkerTable, CommonWorkerTable, AllWorkerTable
+from .tw_tables import PMInvoicesTable,InvoicePaymentReportTable, InvoicesListTable, MyOrganizationMembersTable, OpportunitiesListTable, OpportunityWorkerLearnProgressTable, OpportunityWorkerPaymentTable, VisitsTable, WorkerFlaggedTable, WorkerMainTable, WorkerPaymentsTable, WorkerLearnTable, PayWorker, LearnAppTable, DeliveryAppTable, PaymentAppTable, AddBudgetTable, WorkerDeliveryTable, FlaggedWorkerTable, CommonWorkerTable, AllWorkerTable
 
 
 
@@ -3718,3 +3718,220 @@ def opportunity_worker_payment(request, org_slug=None, opp_id=None):
     ]
     table = OpportunityWorkerPaymentTable(data)
     return render(request, "tailwind/pages/opportunity_worker_extended.html", {"header_title": "Worker", "kpi":user_kpi, "tab_name": "Payment", "table": table })    
+
+def pm_invoices_table(request, org_slug=None, opp_id=None):
+    data = [
+    {
+        "index": 1,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,500",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 2,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹300",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 3,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹450",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 4,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹550",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 5,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,100",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 6,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,300",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 7,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹700",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 8,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,250",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 9,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹400",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 10,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹350",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 11,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,500",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 12,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹600",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 13,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,200",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 14,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹500",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 15,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,150",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 16,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹450",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 17,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹550",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 18,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹1,500",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 19,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹100",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "not-paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    },
+    {
+        "index": 20,
+        "invoiceNumber": "1AFF2023062678899",
+        "amount": "₹400",
+        "dateAdded": "12-Aug-2025",
+        "addedBy": "person@mail.com",
+        "status": "paid",
+        "paymentDate": "12-Aug-2025",
+        "actions": {"list": ["Download Invoice"]}
+    }
+    ]
+
+
+    table = PMInvoicesTable(data)
+    return render(request, "tailwind/components/tables/index_selectable_table.html",{ "table": table})
+
+def pm_invoices(request,org_slug=None,opp_id=None):
+    return render(request, 
+                  "tailwind/pages/pm_invoices.html",
+                  {
+                      "title": "Invoices",
+                      "opportunity_name": "Opportunity Name",
+                  }
+                )
