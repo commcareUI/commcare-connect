@@ -1,0 +1,101 @@
+{% extends 'tailwind/base.html' %}
+{% load django_tables2 %}
+
+{% block content %}
+    {# Main container #}
+    <div class="mx-auto flex flex-col gap-4 w-full mb-4">
+        {# Opportunity Name Component #}
+        <p class="text-brand-deep-purple font-medium title-sm">{{opportunity_name}}</p>
+
+        {# Content Container #}
+        <div class="flex flex-col gap-2">
+            {# Header Panel #}
+            <div class="w-full h-14 shadow-sm flex justify-between items-center rounded-lg bg-slate-50 px-4">
+                <p class="text-brand-deep-purple font-medium text-sm">{{title}}</p>
+                <div class="text-brand-deep-purple">
+                    <button class="button-icon">
+                        <i class="fa-light fa-download button-icon"></i>
+                    </button>
+                    <button class="button-icon">
+                        <i class="fa-light fa-sliders-simple"></i>
+                    </button>
+                </div>
+            </div>
+
+            {# Table Container #}
+            <div class="w-full overflow-y-auto rounded-lg shadow-xs">
+                <div hx-get="/a/test-1/opportunity/1/tw/tables/pm_invoices_table" hx-trigger="load" hx-swap="outerHTML"></div>
+            </div>
+
+            {# Footer #}
+            <div class="table-footer w-full flex items-center justify-between h-14 bg-slate-50 text-brand-deep-purple py-2 px-4 rounded-lg ">
+                <div>
+                    <div class="flex items-center gap-x-5">
+                        <i class="fa-light fa-arrow-rotate-left text-2xl"></i>
+                        <i class="fa-light fa-arrow-rotate-right text-2xl"></i>
+                        {% include "tailwind/components/pagination.html" %}
+                    </div>
+                </div>
+            </div>
+
+
+            {# Modal #}
+            <div x-data="{ open: false}" 
+                 @open-status-modal.window="open = true;">
+                
+                {# Backdrop #}
+                <div x-show="open"
+                    x-cloak  
+                     class="fixed inset-0 bg-black/50 z-40" 
+                     @click="open = false">
+                </div>
+
+                {# Modal Content #}
+                <div x-show="open" 
+                        x-cloak
+                     class="fixed inset-0 z-50 flex items-center justify-center"
+                     x-transition>
+                    <div class="bg-white rounded-lg shadow-xl w-128 p-6" 
+                         @click.outside="open = false">
+                        <form x-data="{ 
+                            handleSubmit() {
+                                // Form submission logic here
+                                open = false;
+                            }
+                        }" @submit.prevent="handleSubmit">
+                            <div class="text-lg text-brand-deep-purple mb-4">Mark as Paid</div>
+                            <div class="text-black text-sm mb-6">Update the Invoice Status to "Paid" Once Payment is Completed</div>
+                            {# inputs #}
+                            <div class="relative mb-4">
+                                <i class="fa-light fa-money-bill absolute left-3 top-1/2 -translate-y-1/2"></i>
+                                <input type="text" 
+                                       name="amount"
+                                       placeholder="Amount" 
+                                       class="w-full pl-10 text-brand-blue-light border border-brand-border-light rounded-lg p-2 focus:border-black/50 focus:ring-1 focus:ring-black/50 focus:outline-none">
+                            </div>
+
+                            <div class="relative mb-4">
+                                <i class="fa-light fa-calendar absolute left-3 top-1/2 -translate-y-1/2"></i>
+                                <input type="text" 
+                                       name="payment_date"
+                                       placeholder="Date of Payment" 
+                                       class="w-full pl-10 text-brand-blue-light border border-brand-border-light rounded-lg p-2 focus:border-black/50 focus:ring-1 focus:ring-black/50 focus:outline-none">
+                            </div>
+                            <div class="flex justify-end gap-2">
+                                <button type="button"
+                                        @click="open = false" 
+                                        class="button button-md border-2 rounded-lg border-brand-border-light">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                        class="px-4 py-2 bg-[#16A34A] text-white rounded-md hover:bg-[#15803D]">
+                                    Mark as Paid
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
