@@ -4,7 +4,7 @@
     x-cloak
     @click.outside="sidebarOpen = false"
     class="fixed top-0 left-0 h-screen bg-brand-deep-purple pt-3 z-40 text-white flex flex-col justify-between transition-all duration-300 px-2"
-    :class="sidebarOpen ? 'w-64' : 'w-16'">
+    :class="sidebarOpen ? 'w-56' : 'w-14'">
 
     <!-- Top Section -->
     <div>
@@ -33,7 +33,6 @@
                 <i class="fa-light text-lg text-brand-sky"
                     :class="sidebarOpen ? 'fa-xmark-large': 'fa-bars'"
                     @click="sidebarOpen = !sidebarOpen"></i>
-                
             </div>
     
             <div class="transition-all duration-300 overflow-hidden flex items-center"
@@ -43,7 +42,7 @@
         </div>
 
         <!-- Navigation Items -->
-        <div class="mt-5">
+        <div class="mt-5 space-y-1">
             {% url 'program:home' request.org.slug as program_home_url %}
             {% include "tailwind/components/sidenav-items.html" with name='Programs' icon='table-columns'  target=program_home_url %}
             {% include "tailwind/components/sidenav-items.html" with name='Opportunities' icon='table-cells-large'  target='/opportunities' %}
