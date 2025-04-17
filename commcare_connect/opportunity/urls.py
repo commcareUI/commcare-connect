@@ -153,6 +153,7 @@ urlpatterns = [
     path("<int:opp_id>/tw/invoice_list/", tw_views.invoice_list, name="tw_invoice_list"),
     path("<int:opp_id>/tw/my_organization/", tw_views.my_organization, name="tw_my_organization"),
     path("<int:opp_id>/tw/add_budget/", tw_views.add_budget, name="tw_add_budget"),
+    path("<int:opp_id>/tw/pm_invoices/", tw_views.pm_invoices, name="tw_pm_invoices"),
     path("<int:opp_id>/tw/visits/", tw_views.opportunity_visits, name="tw_visits"), # TODO
     path("<int:opp_id>/tw/create/", tw_views.create_opportunity, name="tw_visits"), # TODO 
     path("<int:opp_id>/tw/onboarding/", tw_views.onboarding, name="tw_onboarding"),
@@ -176,6 +177,7 @@ urlpatterns = [
     path("<int:opp_id>/tw/tables/worker_approved_table",tw_views.worker_approved_table, name="tw_approved_table"),
     path("<int:opp_id>/tw/tables/worker_rejected_table",tw_views.worker_rejected_table, name="tw_rejected_table"),
     path("<int:opp_id>/tw/tables/worker_all_table",tw_views.worker_all_table, name="tw_all_table"),
+    path("<int:opp_id>/tw/tables/pm_invoices_table",tw_views.pm_invoices_table, name="tw_pm_invoices_table"),
     # API
     path("<int:opp_id>/tw/api/payment_app_expand",tw_views.payment_app_table_expand, name="tw_payment_app"),
     path("<int:opp_id>/tw/api/payment_history/", tw_views.payment_history, name="tw_payment_history"),
