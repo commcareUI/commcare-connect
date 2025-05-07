@@ -5,7 +5,7 @@
       <div class="flex items-start justify-end gap-6 w-full">
         <div class="flex-1">
           <p class="card_title">{{ program.name }}</p>
-          <p class="card_description w-1/2">{{program.description}}</p>
+          <p class="card_description xl:w-1/2 w-full">{{program.description}}</p>
         </div>
         <div class="space-x-2">
           <button class="button-icon">
@@ -18,14 +18,14 @@
         </div>
       </div>
     </div>
-    <div class="flex justify-between items-center">
+    <div class="flex justify-between xl:items-center items-start xl:flex-row flex-col">
       <!-- program info -->
-      <div class="flex items-center gap-6">
+      <div class="flex flex-col md:flex-row md:items-center items-start lg:gap-6 gap-3">
         {% include 'tailwind/components/cards/info.html' with icon="file-check" head="Delivery Type" data=program.delivery_type classname="infocard-dark" %}
-        <div class="line my-2 h-8 w-1 bg-gray-200"></div>
+        <div class="line my-2 h-8 w-1 bg-gray-200 lg:block hidden"></div>
         {% include 'tailwind/components/cards/info.html' with icon="calendar-arrow-up" head="Start Date" data=program.start_date classname="infocard-dark" %} 
         {% include 'tailwind/components/cards/info.html' with icon="arrow-right text-brand-mango" head="End Date" data=program.end_date classname="infocard-dark" %}
-        <div class="line my-2 h-8 w-1 bg-gray-200"></div>
+        <div class="line my-2 h-8 w-1 bg-gray-200 lg:block hidden"></div>
         {% include 'tailwind/components/cards/info.html' with icon="money-bill-wave" head="Budget" data=program.budget classname="infocard-dark" %}
       </div>
   
